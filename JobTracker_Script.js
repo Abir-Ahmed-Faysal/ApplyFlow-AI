@@ -539,7 +539,7 @@ function getLastDataRow(sheet) {
   for (let i = data.length - 1; i >= 0; i--) {
     if (data[i][0] !== "") return i + 1;
   }
-  return 2; // হেডারের পরে
+  return sheet.getLastRow() || 2; // ✅ Fixed: use getLastRow() instead of hardcoded 2
 }
 
 // ============================================================
@@ -574,15 +574,30 @@ function autoSetup() {
     appSheet.getRange("AB1").setValue("Attached Files");
   }
   
-  // 2. Setup Email Template Tab
+  // 2. Setup Email Template Tab — Fixed: full professional template
   let tmplSheet = ss.getSheetByName("Email Template");
   if (!tmplSheet) {
     tmplSheet = ss.insertSheet("Email Template");
-    tmplSheet.getRange("A1").setValue("Hello {{company}},\n\nI am writing to apply for the {{role}} position.\n\nBest regards,\nMd Faysal Ahmed");
-    tmplSheet.setColumnWidth(1, 500);
   }
+
+  const emailTemplate =
+    "Dear Hiring Team at {{company}},\n\n" +
+    "I am writing to express my interest in the {{role}} position at {{company}}. As a self-taught Full-Stack (MERN) Developer based in Dhaka, Bangladesh, I am confident that my skills and projects align well with what you are looking for.\n\n" +
+    "I have hands-on experience building production-ready web applications using JavaScript, TypeScript, React.js, Next.js, Node.js, Express.js, MongoDB, PostgreSQL, and Prisma. Two of my key projects include:\n\n" +
+    "• MediStore — An AI-powered medicine e-commerce platform featuring Google Generative AI integration, multi-role authentication (JWT), PostgreSQL/Prisma backend, and TanStack Query on the frontend.\n\n" +
+    "• Sustainify — A community platform with Stripe payment integration, Reddit-style voting, and Cron job automation for scheduled tasks.\n\n" +
+    "I am available immediately (within 1-2 days of offer) and open to remote, onsite, or hybrid roles. Please find my CV attached for your review.\n\n" +
+    "Looking forward to hearing from you.\n\n" +
+    "Best regards,\n" +
+    "Md Faysal Ahmed\n" +
+    "Full-Stack Developer (MERN)\n" +
+    "Phone / WhatsApp: +8801779161032\n" +
+    "GitHub: https://github.com/faysalabir779";
+
+  tmplSheet.getRange("A1").setValue(emailTemplate);
+  tmplSheet.setColumnWidth(1, 600);
   
-  SpreadsheetApp.getUi().alert("✅ সেটআপ সম্পন্ন হয়েছে! 'Applications' ট্যাবে নতুন কলাম এবং 'Email Template' ট্যাব যোগ করা হয়েছে।");
+  SpreadsheetApp.getUi().alert("Setup complete! New columns added to Applications tab and Email Template tab is ready.");
 }
 
 // ============================================================
@@ -813,7 +828,7 @@ function getSendDialogData() {
 
 function isValidEmail(email) {
   if (!email || typeof email !== 'string') return false;
-  return /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email.trim());
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()); // ✅ Fixed: removed double-escaped backslashes
 }
 
 // ============================================================
