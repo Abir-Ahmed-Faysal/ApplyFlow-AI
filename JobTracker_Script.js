@@ -510,7 +510,85 @@ function addRowToSheet(jobData, finalScore, codeScore, geminiScore, circularText
     finalScore,                               // O: Match Score (Final = গড়)
     scoreNote,                                // P: Score Notes (breakdown)
     status,                                   // Q: Application Status
-    "No",                       function showSendDialog() {
+    "No",                                     // R: Response
+    "",                                       // S: Follow-up Date
+    "",                                       // T: Interview Date
+    "",                                       // U: Recruiter Name
+    "",                                       // V: Referred By
+    "",                                       // W: Contact / WhatsApp No.
+    "",                                       // X: Notes
+    "",                                       // Y: Mail Sent
+    jobData.customSubjectInstruction && jobData.customSubjectInstruction !== "N/A" ? jobData.customSubjectInstruction : "Default", // Z: Subject Format
+    "",                                       // AA: Audit Issue
+    ""                                        // AB: Attached Files
+  ];
+
+  sheet.getRange(newRow, 1, 1, rowData.length).setValues([rowData]);
+
+  // ফাইনাল স্কোর অনুযায়ী রঙ
+  const scoreCell = sheet.getRange(newRow, 15);
+  if (finalScore >= 80) scoreCell.setBackground("#c6efce");       // সবুজ
+  else if (finalScore >= 70) scoreCell.setBackground("#ffeb9c");  // হলুদ
+}
+
+// ============================================================
+// শেষ ডেটা রো খোঁজা
+// ============================================================
+function getLastDataRow(sheet) {
+  const data = sheet.getDataRange().getValues();
+  for (let i = data.length - 1; i >= 0; i--) {
+    if (data[i][0] !== "") return i + 1;
+  }
+  return 2; // হেডারের পরে
+}
+
+// ============================================================
+// সেটিংস দেখানো
+// ============================================================
+function showSettings() {
+  const info = `
+⚙️ বর্তমান সেটিংস:
+
+✅ সর্বনিম্ন স্কোর: ${MIN_SCORE}%
+✅ আমার স্কিলস: ${MY_SKILLS.join(", ")}
+✅ অভিজ্ঞতা সীমা: ৩ বছর পর্যন্ত (৪+ হলে স্কিপ)
+
+স্কিল বা সেটিং পরিবর্তন করতে:
+Extensions > Apps Script > কোড এডিট করুন
+  `;
+  SpreadsheetApp.getUi().alert(info);
+}
+
+// ============================================================
+// অটো-সেটআপ (Auto Setup)
+// ============================================================
+function autoSetup() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  
+  // 1. Setup Applications Tab Columns
+  let appSheet = ss.getSheetByName("Applications");
+  if (appSheet) {
+    appSheet.getRange("Y1").setValue("Mail Sent");
+    appSheet.getRange("Z1").setValue("Subject Format");
+    appSheet.getRange("AA1").setValue("Audit Issue");
+    appSheet.getRange("AB1").setValue("Attached Files");
+  }
+  
+  // 2. Setup Email Template Tab
+  let tmplSheet = ss.getSheetByName("Email Template");
+  if (!tmplSheet) {
+    tmplSheet = ss.insertSheet("Email Template");
+    tmplSheet.getRange("A1").setValue("Hello {{company}},\n\nI am writing to apply for the {{role}} position.\n\nBest regards,\nMd Faysal Ahmed");
+    tmplSheet.setColumnWidth(1, 500);
+  }
+  
+  SpreadsheetApp.getUi().alert("✅ সেটআপ সম্পন্ন হয়েছে! 'Applications' ট্যাবে নতুন কলাম এবং 'Email Template' ট্যাব যোগ করা হয়েছে।");
+}
+
+// ============================================================
+// ইমেইল পাঠান (Mail Merge) - ডায়ালগ
+// ============================================================
+function showSendDialog() {
   const html = HtmlService.createHtmlOutput(`
 <!DOCTYPE html>
 <html>
@@ -661,120 +739,8 @@ function addRowToSheet(jobData, finalScore, codeScore, geminiScore, circularText
   `)
   .setWidth(500).setHeight(500).setTitle("🚀 Bulk Apply (ApplyFlow AI)");
   SpreadsheetApp.getUi().showModalDialog(html, "🚀 Bulk Apply");
-}= selectedJob.computedSubject;
-
-      // Attachments preview
-      let attachTexts = [];
-      const resVal = document.getElementById('resumeSelect').value;
-      if (resVal === 'upload') {
-        const file = document.getElementById('resumeUpload').files[0];
-        if (file) attachTexts.push(file.name);
-        else attachTexts.push("⚠️ Resume আপলোড করা হয়নি!");
-      } else if (resVal) {
-        const resName = document.getElementById('resumeSelect').options[document.getElementById('resumeSelect').selectedIndex].text;
-        attachTexts.push(resName);
-      } else {
-        attachTexts.push("⚠️ কোনো Resume সিলেক্ট করা হয়নি");
-      }
-
-      const addFile = document.getElementById('additionalUpload').files[0];
-      if (addFile) attachTexts.push(addFile.name);
-
-      document.getElementById('prevAttach').textContent = attachTexts.join(", ");
-
-      box.style.display = 'block';
-      btn.disabled = false;
-    }
-
-    // Update preview when files change
-    document.getElementById('resumeUpload').addEventListener('change', updatePreview);
-    document.getElementById('additionalUpload').addEventListener('change', updatePreview);
-
-    function onError(err) {
-      showStatus('❌ Error: ' + err.message, 'error');
-    }
-
-    function showStatus(msg, type) {
-      const el = document.getElementById('status');
-      el.textContent = msg;
-      el.className = type;
-      el.style.display = 'block';
-    }
-
-    async function sendEmail() {
-      if (!selectedJob) return;
-
-      const resVal = document.getElementById('resumeSelect').value;
-      const resFile = document.getElementById('resumeUpload').files[0];
-      const addFile = document.getElementById('additionalUpload').files[0];
-
-      if (!resVal && !resFile) {
-        if (!confirm("আপনি কোনো Resume/CV সিলেক্ট করেননি! তবুও কি পাঠাতে চান?")) return;
-      }
-
-      showStatus('⏳ ইমেইল পাঠানো হচ্ছে...', 'loading');
-      document.getElementById('sendBtn').disabled = true;
-
-      try {
-        let payload = {
-          rowIndex: selectedJob.rowIndex,
-          company: selectedJob.company,
-          title: selectedJob.title,
-          applyEmail: selectedJob.applyEmail,
-          computedSubject: selectedJob.computedSubject,
-          resumeUrl: (resVal !== 'upload') ? resVal : null,
-          resumeBase64: null,
-          resumeMime: null,
-          resumeName: null,
-          addBase64: null,
-          addMime: null,
-          addName: null
-        };
-
-        if (resVal === 'upload' && resFile) {
-          payload.resumeBase64 = await readFileAsBase64(resFile);
-          payload.resumeMime = resFile.type;
-          payload.resumeName = resFile.name;
-        }
-
-        if (addFile) {
-          payload.addBase64 = await readFileAsBase64(addFile);
-          payload.addMime = addFile.type;
-          payload.addName = addFile.name;
-        }
-
-        google.script.run
-          .withSuccessHandler(res => {
-            showStatus('✅ ' + res, 'success');
-            setTimeout(() => google.script.host.close(), 2500);
-          })
-          .withFailureHandler(err => {
-            showStatus('❌ ' + err.message, 'error');
-            document.getElementById('sendBtn').disabled = false;
-          })
-          .sendJobApplicationEmail(payload);
-
-      } catch (e) {
-        showStatus('❌ Error processing files', 'error');
-        document.getElementById('sendBtn').disabled = false;
-      }
-    }
-
-    function readFileAsBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result.split(',')[1]);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    }
-  </script>
-</body>
-</html>
-  `)
-  .setWidth(500).setHeight(600).setTitle("📧 ইমেইল পাঠান (Mail Merge)");
-  SpreadsheetApp.getUi().showModalDialog(html, "📧 ইমেইল পাঠান");
 }
+
 
 // ============================================================
 // Get Dialog Data (Server-Side)
