@@ -757,8 +757,10 @@ function getSendDialogData() {
   if (qrSheet) {
     const qrData = qrSheet.getDataRange().getValues();
     for (let i = 1; i < qrData.length; i++) {
-      if (qrData[i][0] && qrData[i][1]) {
-        resumes.push({ name: qrData[i][0], url: qrData[i][1] });
+      let name = qrData[i][0];
+      let url = qrData[i][1];
+      if (name && url) {
+        resumes.push({ name: String(name).trim(), url: String(url).trim() });
       }
     }
   }
@@ -772,13 +774,13 @@ function getSendDialogData() {
   let invalidCount = 0;
   
   for (let i = 1; i < appData.length; i++) {
-    const applyMethod = appData[i][6]; // G
-    const applyEmail = appData[i][7];  // H
-    const company = appData[i][2];     // C
-    const title = appData[i][3];       // D
+    const applyMethod = String(appData[i][6] || "").trim(); // G
+    const applyEmail = String(appData[i][7] || "").trim();  // H
+    const company = String(appData[i][2] || "").trim();     // C
+    const title = String(appData[i][3] || "").trim();       // D
     const mailSent = appData[i][24];   // Y
-    const subjectFormat = appData[i][25] || "Default"; // Z
-    const auditIssue = appData[i][26]; // AA
+    const subjectFormat = appData[i][25] ? String(appData[i][25]).trim() : "Default"; // Z
+    const auditIssue = appData[i][26] ? String(appData[i][26]).trim() : ""; // AA
     
     if (applyMethod === "Email" && !mailSent) {
       if (auditIssue === "") { // No issues found by runAudit!
@@ -810,7 +812,8 @@ function getSendDialogData() {
 }
 
 function isValidEmail(email) {
-  return /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email);
+  if (!email || typeof email !== 'string') return false;
+  return /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email.trim());
 }
 
 // ============================================================
@@ -834,7 +837,7 @@ function sendBulkApplicationEmails(payload) {
   
   if (payload.resumeUrl) {
     try {
-      const idMatch = payload.resumeUrl.match(/[-\w]{25,}/);
+      const idMatch = payload.resumeUrl.match(/[-\\w]{25,}/);
       if (idMatch) {
         const file = DriveApp.getFileById(idMatch[0]);
         attachments.push(file.getAs(MimeType.PDF));
@@ -858,14 +861,15 @@ function sendBulkApplicationEmails(payload) {
 
   const appSheet = ss.getSheetByName("Applications");
   let successCount = 0;
+  let errorCount = 0;
 
   for (let job of payload.jobs) {
-    let mergedBody = templateBody
-      .replace(/\{{1,2}role\}{1,2}/gi, job.title)
-      .replace(/\{{1,2}company name\}{1,2}/gi, job.company)
-      .replace(/\{{1,2}company\}{1,2}/gi, job.company);
+    let mergedBody = String(templateBody)
+      .replace(/\{{1,2}role\}{1,2}/gi, String(job.title))
+      .replace(/\{{1,2}company name\}{1,2}/gi, String(job.company))
+      .replace(/\{{1,2}company\}{1,2}/gi, String(job.company));
 
-    let htmlBody = mergedBody.replace(/\n/g, "<br>");
+    let htmlBody = mergedBody.replace(/\\n/g, "<br>");
     
     try {
       GmailApp.sendEmail(job.applyEmail, job.computedSubject, mergedBody, {
@@ -880,10 +884,14 @@ function sendBulkApplicationEmails(payload) {
       appSheet.getRange(job.rowIndex, 28).setValue(attachedFileNames.join(", "));
       successCount++;
     } catch (e) {
-      // Continue to next job even if one fails
+      errorCount++;
+      console.error("Failed to send email for row " + job.rowIndex + ": " + e.message);
     }
   }
   
+  if (errorCount > 0) {
+    return `${successCount} টি সফল হয়েছে, ${errorCount} টিতে এরর হয়েছে!`;
+  }
   return successCount + " টি ইমেইল সফলভাবে পাঠানো হয়েছে!";
 }
 
@@ -908,16 +916,16 @@ function runAudit(showAlert = true) {
 
   const issuesToUpdate = []; 
   for (let i = 0; i < data.length; i++) {
-    issuesToUpdate.push([data[i][26] || ""]);
+    issuesToUpdate.push([data[i][26] ? String(data[i][26]) : ""]);
   }
 
   let hasChanges = false;
 
   for (let i = 1; i < data.length; i++) {
-    const applyMethod = data[i][6];  
-    const applyEmail = data[i][7];   
-    const company = data[i][2];      
-    const title = data[i][3];        
+    const applyMethod = String(data[i][6] || "").trim();  
+    const applyEmail = String(data[i][7] || "").trim();   
+    const company = String(data[i][2] || "").trim();      
+    const title = String(data[i][3] || "").trim();        
     const deadline = data[i][12];    
     const mailSent = data[i][24];    
     
@@ -967,7 +975,8 @@ function runAudit(showAlert = true) {
   }
 
   if (hasChanges) {
-    sheet.getDataRange().setBackgrounds(backgroundColors);
+    const range = sheet.getRange(1, 1, backgroundColors.length, backgroundColors[0].length);
+    range.setBackgrounds(backgroundColors);
     sheet.getRange(1, 27, issuesToUpdate.length, 1).setValues(issuesToUpdate);
     if (showAlert) SpreadsheetApp.getUi().alert("✅ রো যাচাই সম্পন্ন হয়েছে! অসম্পূর্ণ ফিল্ডগুলো লাল রঙে চিহ্নিত করা হয়েছে।");
   } else {
