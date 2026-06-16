@@ -510,85 +510,7 @@ function addRowToSheet(jobData, finalScore, codeScore, geminiScore, circularText
     finalScore,                               // O: Match Score (Final = গড়)
     scoreNote,                                // P: Score Notes (breakdown)
     status,                                   // Q: Application Status
-    "No",                                     // R: Response
-    "",                                       // S: Follow-up Date
-    "",                                       // T: Interview Date
-    "",                                       // U: Recruiter Name
-    "",                                       // V: Referred By
-    "",                                       // W: Contact / WhatsApp No.
-    "",                                       // X: Notes
-    "",                                       // Y: Mail Sent
-    jobData.customSubjectInstruction && jobData.customSubjectInstruction !== "N/A" ? jobData.customSubjectInstruction : "Default", // Z: Subject Format
-    "",                                       // AA: Audit Issue
-    ""                                        // AB: Attached Files
-  ];
-
-  sheet.getRange(newRow, 1, 1, rowData.length).setValues([rowData]);
-
-  // ফাইনাল স্কোর অনুযায়ী রঙ
-  const scoreCell = sheet.getRange(newRow, 15);
-  if (finalScore >= 80) scoreCell.setBackground("#c6efce");       // সবুজ
-  else if (finalScore >= 70) scoreCell.setBackground("#ffeb9c");  // হলুদ
-}
-
-// ============================================================
-// শেষ ডেটা রো খোঁজা
-// ============================================================
-function getLastDataRow(sheet) {
-  const data = sheet.getDataRange().getValues();
-  for (let i = data.length - 1; i >= 0; i--) {
-    if (data[i][0] !== "") return i + 1;
-  }
-  return 2; // হেডারের পরে
-}
-
-// ============================================================
-// সেটিংস দেখানো
-// ============================================================
-function showSettings() {
-  const info = `
-⚙️ বর্তমান সেটিংস:
-
-✅ সর্বনিম্ন স্কোর: ${MIN_SCORE}%
-✅ আমার স্কিলস: ${MY_SKILLS.join(", ")}
-✅ অভিজ্ঞতা সীমা: ৩ বছর পর্যন্ত (৪+ হলে স্কিপ)
-
-স্কিল বা সেটিং পরিবর্তন করতে:
-Extensions > Apps Script > কোড এডিট করুন
-  `;
-  SpreadsheetApp.getUi().alert(info);
-}
-
-// ============================================================
-// অটো-সেটআপ (Auto Setup)
-// ============================================================
-function autoSetup() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
-  
-  // 1. Setup Applications Tab Columns
-  let appSheet = ss.getSheetByName("Applications");
-  if (appSheet) {
-    appSheet.getRange("Y1").setValue("Mail Sent");
-    appSheet.getRange("Z1").setValue("Subject Format");
-    appSheet.getRange("AA1").setValue("Audit Issue");
-    appSheet.getRange("AB1").setValue("Attached Files");
-  }
-  
-  // 2. Setup Email Template Tab
-  let tmplSheet = ss.getSheetByName("Email Template");
-  if (!tmplSheet) {
-    tmplSheet = ss.insertSheet("Email Template");
-    tmplSheet.getRange("A1").setValue("Hello {{company}},\n\nI am writing to apply for the {{role}} position.\n\nBest regards,\nMd Faysal Ahmed");
-    tmplSheet.setColumnWidth(1, 500);
-  }
-  
-  SpreadsheetApp.getUi().alert("✅ সেটআপ সম্পন্ন হয়েছে! 'Applications' ট্যাবে নতুন কলাম এবং 'Email Template' ট্যাব যোগ করা হয়েছে।");
-}
-
-// ============================================================
-// ইমেইল পাঠান (Mail Merge) - ডায়ালগ
-// ============================================================
-function showSendDialog() {
+    "No",                       function showSendDialog() {
   const html = HtmlService.createHtmlOutput(`
 <!DOCTYPE html>
 <html>
@@ -602,8 +524,7 @@ function showSendDialog() {
     .btn-primary { background: #1a73e8; color: white; width: 100%; margin-top: 15px; padding: 10px 20px; border: none; border-radius: 6px; font-size: 14px; cursor: pointer; font-weight: bold; }
     .btn-primary:hover:not(:disabled) { background: #1558b0; }
     .btn-primary:disabled { background: #ccc; cursor: not-allowed; }
-    .preview-box { background: #fff; padding: 10px; border: 1px solid #ddd; border-radius: 6px; margin-top: 15px; font-size: 13px; color: #444; }
-    .preview-box strong { color: #222; }
+    .summary-box { background: #e8f0fe; padding: 12px; border: 1px solid #c6dafc; border-radius: 6px; margin-bottom: 15px; font-size: 13px; color: #1a73e8; }
     #status { margin-top: 12px; padding: 10px; border-radius: 6px; font-size: 13px; display: none; text-align: center; }
     .loading { background: #e8f0fe; color: #1a73e8; }
     .success { background: #e6f4ea; color: #137333; }
@@ -611,15 +532,10 @@ function showSendDialog() {
   </style>
 </head>
 <body>
-  <h2>📧 ইমেইল পাঠান</h2>
-  <p>যাদের Apply Method "Email", তাদের লিস্ট নিচে দেখাচ্ছে।</p>
+  <h2>🚀 Bulk Apply (ApplyFlow AI)</h2>
+  <div class="summary-box" id="summaryBox">⏳ ডেটা লোড এবং অডিট করা হচ্ছে...</div>
 
-  <label>জব নির্বাচন করুন *</label>
-  <select id="jobSelect" onchange="updatePreview()">
-    <option value="">-- লোড হচ্ছে... --</option>
-  </select>
-
-  <label>Resume / CV *</label>
+  <label>Resume / CV (সবগুলোর জন্য একটি) *</label>
   <select id="resumeSelect" onchange="toggleResumeUpload()">
     <option value="">-- লোড হচ্ছে... --</option>
   </select>
@@ -628,34 +544,27 @@ function showSendDialog() {
   <label>Additional File (Optional)</label>
   <input type="file" id="additionalUpload" />
 
-  <div class="preview-box" id="previewBox" style="display:none;">
-    <strong>Company:</strong> <span id="prevCompany"></span><br>
-    <strong>Role:</strong> <span id="prevRole"></span><br>
-    <strong>Subject:</strong> <span id="prevSubject"></span><br>
-    <strong>Attachments:</strong> <span id="prevAttach"></span>
-  </div>
-
-  <button class="btn-primary" id="sendBtn" onclick="sendEmail()" disabled>📧 ইমেইল পাঠান</button>
+  <button class="btn-primary" id="sendBtn" onclick="sendEmails()" disabled>📧 ইমেইল পাঠানো শুরু করুন</button>
 
   <div id="status"></div>
 
   <script>
-    let serverData = {};
-    let selectedJob = null;
+    let validJobs = [];
 
     // Load data on startup
     google.script.run.withSuccessHandler(onDataLoaded).withFailureHandler(onError).getSendDialogData();
 
     function onDataLoaded(data) {
-      serverData = data;
-      const jobSelect = document.getElementById('jobSelect');
-      jobSelect.innerHTML = '<option value="">-- সিলেক্ট করুন --</option>';
-      data.jobs.forEach(job => {
-        const opt = document.createElement('option');
-        opt.value = job.rowIndex;
-        opt.textContent = \`\${job.company} - \${job.title}\`;
-        jobSelect.appendChild(opt);
-      });
+      validJobs = data.jobs.slice(0, 10); // Take max 10 jobs
+      
+      const summaryBox = document.getElementById('summaryBox');
+      if (validJobs.length === 0) {
+        summaryBox.innerHTML = \`পেন্ডিং কোনো জব নেই অথবা সবগুলোর তথ্য অসম্পূর্ণ। <b>\${data.invalidCount}</b> টি জবে ভুল/অসম্পূর্ণ তথ্য রয়েছে যা লাল রঙে মার্ক করা হয়েছে।\`;
+        document.getElementById('sendBtn').disabled = true;
+      } else {
+        summaryBox.innerHTML = \`<b>\${validJobs.length}</b> টি জব রেডি আছে। (সর্বোচ্চ ১০টি একসাথে)।<br><br><b>\${data.invalidCount}</b> টি অসম্পূর্ণ জব লাল রঙে মার্ক করে স্কিপ করা হয়েছে।\`;
+        document.getElementById('sendBtn').disabled = false;
+      }
 
       const resumeSelect = document.getElementById('resumeSelect');
       resumeSelect.innerHTML = '<option value="">-- সিলেক্ট করুন --</option><option value="upload">📤 নিজের ফাইল আপলোড করুন...</option>';
@@ -670,26 +579,89 @@ function showSendDialog() {
     function toggleResumeUpload() {
       const val = document.getElementById('resumeSelect').value;
       document.getElementById('resumeUpload').style.display = val === 'upload' ? 'block' : 'none';
-      updatePreview();
     }
 
-    function updatePreview() {
-      const rowIndex = document.getElementById('jobSelect').value;
-      const btn = document.getElementById('sendBtn');
-      const box = document.getElementById('previewBox');
-      
-      if (!rowIndex) {
-        box.style.display = 'none';
-        btn.disabled = true;
-        selectedJob = null;
-        return;
+    function onError(err) {
+      showStatus('❌ Error: ' + err.message, 'error');
+    }
+
+    function showStatus(msg, type) {
+      const el = document.getElementById('status');
+      el.textContent = msg;
+      el.className = type;
+      el.style.display = 'block';
+    }
+
+    async function sendEmails() {
+      if (validJobs.length === 0) return;
+
+      const resVal = document.getElementById('resumeSelect').value;
+      const resFile = document.getElementById('resumeUpload').files[0];
+      const addFile = document.getElementById('additionalUpload').files[0];
+
+      if (!resVal && !resFile) {
+        if (!confirm("আপনি কোনো Resume/CV সিলেক্ট করেননি! তবুও কি পাঠাতে চান?")) return;
       }
 
-      selectedJob = serverData.jobs.find(j => j.rowIndex == rowIndex);
-      
-      document.getElementById('prevCompany').textContent = selectedJob.company;
-      document.getElementById('prevRole').textContent = selectedJob.title;
-      document.getElementById('prevSubject').textContent = selectedJob.computedSubject;
+      showStatus('⏳ ইমেইল পাঠানো হচ্ছে (Bulk Send)...', 'loading');
+      document.getElementById('sendBtn').disabled = true;
+
+      try {
+        let payload = {
+          jobs: validJobs,
+          resumeUrl: (resVal !== 'upload') ? resVal : null,
+          resumeBase64: null,
+          resumeMime: null,
+          resumeName: null,
+          addBase64: null,
+          addMime: null,
+          addName: null
+        };
+
+        if (resVal === 'upload' && resFile) {
+          payload.resumeBase64 = await readFileAsBase64(resFile);
+          payload.resumeMime = resFile.type;
+          payload.resumeName = resFile.name;
+        }
+
+        if (addFile) {
+          payload.addBase64 = await readFileAsBase64(addFile);
+          payload.addMime = addFile.type;
+          payload.addName = addFile.name;
+        }
+
+        google.script.run
+          .withSuccessHandler(res => {
+            showStatus('✅ ' + res, 'success');
+            setTimeout(() => google.script.host.close(), 3000);
+          })
+          .withFailureHandler(err => {
+            showStatus('❌ ' + err.message, 'error');
+            document.getElementById('sendBtn').disabled = false;
+          })
+          .sendBulkApplicationEmails(payload);
+
+      } catch (e) {
+        showStatus('❌ Error processing files', 'error');
+        document.getElementById('sendBtn').disabled = false;
+      }
+    }
+
+    function readFileAsBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+  </script>
+</body>
+</html>
+  `)
+  .setWidth(500).setHeight(500).setTitle("🚀 Bulk Apply (ApplyFlow AI)");
+  SpreadsheetApp.getUi().showModalDialog(html, "🚀 Bulk Apply");
+}= selectedJob.computedSubject;
 
       // Attachments preview
       let attachTexts = [];
@@ -808,65 +780,67 @@ function showSendDialog() {
 // Get Dialog Data (Server-Side)
 // ============================================================
 function getSendDialogData() {
+  // ১. ডায়ালগ ওপেন হওয়ার আগেই Audit রান করবে (যাতে লাল রঙ আপডেট হয়ে যায়)
+  runAudit(false); // false means no popup alert
+  
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   
-  // 1. Get Resumes from Quick Reference tab
+  // Get Resumes from Quick Reference tab
   const qrSheet = ss.getSheetByName("Quick Reference");
   let resumes = [];
   if (qrSheet) {
     const qrData = qrSheet.getDataRange().getValues();
-    // Assuming A is Role/Name, B is Link
-    for (let i = 1; i < qrData.length; i++) { // Skip header
+    for (let i = 1; i < qrData.length; i++) {
       if (qrData[i][0] && qrData[i][1]) {
         resumes.push({ name: qrData[i][0], url: qrData[i][1] });
       }
     }
   }
 
-  // 2. Get Pending Jobs from Applications tab
+  // Get Pending Jobs
   const appSheet = ss.getSheetByName("Applications");
   if (!appSheet) throw new Error("Applications sheet not found.");
   
   const appData = appSheet.getDataRange().getValues();
   let jobs = [];
+  let invalidCount = 0;
   
   for (let i = 1; i < appData.length; i++) {
     const applyMethod = appData[i][6]; // G
     const applyEmail = appData[i][7];  // H
+    const company = appData[i][2];     // C
+    const title = appData[i][3];       // D
     const mailSent = appData[i][24];   // Y
     const subjectFormat = appData[i][25] || "Default"; // Z
+    const auditIssue = appData[i][26]; // AA
     
-    if (applyMethod === "Email" && !mailSent && isValidEmail(applyEmail)) {
-      let company = appData[i][2]; // C
-      let title = appData[i][3];   // D
-      
-      // Compute Subject
-      let computedSubject = "";
-      if (subjectFormat === "Default" || subjectFormat === "N/A" || !subjectFormat) {
-        computedSubject = title + " Application - Md Faysal Ahmed";
-      } else {
-        // Replace role placeholders like [Role], {{role}}, etc. with actual title
-        computedSubject = subjectFormat.replace(/\{{1,2}role\}{1,2}|\[role\]/gi, title);
-        
-        // Append or replace name
-        computedSubject = computedSubject.replace(/\[your name\]|\{{1,2}name\}{1,2}|\[name\]/gi, "Md Faysal Ahmed");
-        
-        if (!computedSubject.toLowerCase().includes("faysal")) {
-          computedSubject += " - Md Faysal Ahmed";
+    if (applyMethod === "Email" && !mailSent) {
+      if (auditIssue === "") { // No issues found by runAudit!
+        let computedSubject = "";
+        if (subjectFormat === "Default" || subjectFormat === "N/A" || !subjectFormat) {
+          computedSubject = title + " Application - Md Faysal Ahmed";
+        } else {
+          computedSubject = subjectFormat.replace(/\{{1,2}role\}{1,2}|\[role\]/gi, title);
+          computedSubject = computedSubject.replace(/\[your name\]|\{{1,2}name\}{1,2}|\[name\]/gi, "Md Faysal Ahmed");
+          if (!computedSubject.toLowerCase().includes("faysal")) {
+            computedSubject += " - Md Faysal Ahmed";
+          }
         }
-      }
 
-      jobs.push({
-        rowIndex: i + 1,
-        company: company,
-        title: title,
-        applyEmail: applyEmail,
-        computedSubject: computedSubject
-      });
+        jobs.push({
+          rowIndex: i + 1,
+          company: company,
+          title: title,
+          applyEmail: applyEmail,
+          computedSubject: computedSubject
+        });
+      } else {
+        invalidCount++;
+      }
     }
   }
 
-  return { resumes: resumes, jobs: jobs };
+  return { resumes: resumes, jobs: jobs, invalidCount: invalidCount };
 }
 
 function isValidEmail(email) {
@@ -874,176 +848,151 @@ function isValidEmail(email) {
 }
 
 // ============================================================
-// Send Email Server Function
+// Send Bulk Emails Server Function
 // ============================================================
-function sendJobApplicationEmail(payload) {
-  // Check Quota
-  if (MailApp.getRemainingDailyQuota() < 1) {
-    throw new Error("Gmail daily quota exceeded! Try again tomorrow.");
+function sendBulkApplicationEmails(payload) {
+  if (!payload.jobs || payload.jobs.length === 0) return "কোনো জব সিলেক্ট করা হয়নি।";
+  
+  if (MailApp.getRemainingDailyQuota() < payload.jobs.length) {
+    throw new Error("Gmail quota exceeded!");
   }
 
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  
-  // 1. Get Email Template
   const tmplSheet = ss.getSheetByName("Email Template");
   if (!tmplSheet) throw new Error("'Email Template' tab is missing.");
   let templateBody = tmplSheet.getRange("A1").getValue();
-  if (!templateBody) throw new Error("Template cell A1 in 'Email Template' is empty!");
+  if (!templateBody) throw new Error("Template cell A1 is empty!");
 
-  // Merge placeholders
-  let mergedBody = templateBody
-    .replace(/\{{1,2}role\}{1,2}/gi, payload.title)
-    .replace(/\{{1,2}company name\}{1,2}/gi, payload.company)
-    .replace(/\{{1,2}company\}{1,2}/gi, payload.company);
-
-  // Check leftover placeholders
-  const leftover = mergedBody.match(/\{\{[^}]+\}\}/g);
-  if (leftover) {
-    throw new Error("Unfilled template placeholders remaining: " + leftover.join(", "));
-  }
-
-  // 2. Prepare Attachments
   let attachments = [];
   let attachedFileNames = [];
   
-  // Main Resume
   if (payload.resumeUrl) {
     try {
-      // extract ID from url
       const idMatch = payload.resumeUrl.match(/[-\w]{25,}/);
       if (idMatch) {
         const file = DriveApp.getFileById(idMatch[0]);
         attachments.push(file.getAs(MimeType.PDF));
         attachedFileNames.push(file.getName());
-      } else {
-        throw new Error("Invalid Google Drive URL in Quick Reference.");
-      }
+      } else throw new Error("Invalid Drive URL");
     } catch (e) {
-      throw new Error("Could not access Resume on Drive: " + e.message);
+      throw new Error("Resume Drive Error: " + e.message);
     }
   } else if (payload.resumeBase64) {
-    const blob = Utilities.newBlob(Utilities.base64Decode(payload.resumeBase64), payload.resumeMime, payload.resumeName);
-    attachments.push(blob);
+    attachments.push(Utilities.newBlob(Utilities.base64Decode(payload.resumeBase64), payload.resumeMime, payload.resumeName));
     attachedFileNames.push(payload.resumeName);
   }
 
-  // Additional File
   if (payload.addBase64) {
-    const blob = Utilities.newBlob(Utilities.base64Decode(payload.addBase64), payload.addMime, payload.addName);
-    attachments.push(blob);
+    attachments.push(Utilities.newBlob(Utilities.base64Decode(payload.addBase64), payload.addMime, payload.addName));
     attachedFileNames.push(payload.addName);
   }
 
-  // Check Size (~25MB limit)
   let totalSize = attachments.reduce((acc, blob) => acc + blob.getBytes().length, 0);
-  if (totalSize > 25 * 1024 * 1024) {
-    throw new Error("Total attachment size exceeds 25MB limit.");
-  }
+  if (totalSize > 25 * 1024 * 1024) throw new Error("Total attachment size > 25MB.");
 
-  // 3. Send Email
-  // Replace newlines with <br> for HTML email
-  let htmlBody = mergedBody.replace(/\n/g, "<br>");
-  
-  GmailApp.sendEmail(payload.applyEmail, payload.computedSubject, mergedBody, {
-    htmlBody: htmlBody,
-    attachments: attachments,
-    name: "Md Faysal Ahmed"
-  });
-
-  // 4. Update Sheet
   const appSheet = ss.getSheetByName("Applications");
-  const timestamp = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "dd MMM, yyyy HH:mm");
+  let successCount = 0;
+
+  for (let job of payload.jobs) {
+    let mergedBody = templateBody
+      .replace(/\{{1,2}role\}{1,2}/gi, job.title)
+      .replace(/\{{1,2}company name\}{1,2}/gi, job.company)
+      .replace(/\{{1,2}company\}{1,2}/gi, job.company);
+
+    let htmlBody = mergedBody.replace(/\n/g, "<br>");
+    
+    try {
+      GmailApp.sendEmail(job.applyEmail, job.computedSubject, mergedBody, {
+        htmlBody: htmlBody,
+        attachments: attachments,
+        name: "Md Faysal Ahmed"
+      });
+
+      const timestamp = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "dd MMM, yyyy HH:mm");
+      appSheet.getRange(job.rowIndex, 25).setValue(timestamp);
+      appSheet.getRange(job.rowIndex, 17).setValue("Applied");
+      appSheet.getRange(job.rowIndex, 28).setValue(attachedFileNames.join(", "));
+      successCount++;
+    } catch (e) {
+      // Continue to next job even if one fails
+    }
+  }
   
-  appSheet.getRange(payload.rowIndex, 25).setValue(timestamp); // Y: Mail Sent
-  appSheet.getRange(payload.rowIndex, 17).setValue("Applied"); // Q: Application Status
-  appSheet.getRange(payload.rowIndex, 28).setValue(attachedFileNames.join(", ")); // AB: Attached Files
-  
-  return "Email sent successfully!";
+  return successCount + " টি ইমেইল সফলভাবে পাঠানো হয়েছে!";
 }
 
 // ============================================================
 // Row Audit Function
 // ============================================================
-function runAudit() {
+function runAudit(showAlert = true) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const sheet = ss.getSheetByName("Applications");
   if (!sheet) return;
 
   const data = sheet.getDataRange().getValues();
-  if (data.length <= 1) return; // Only headers
+  if (data.length <= 1) return;
 
-  // We will build arrays to write back in batch
   const backgroundColors = sheet.getDataRange().getBackgrounds();
   
-  // Expand backgroundColors array horizontally if they have fewer than 27 cols
   for (let i = 0; i < backgroundColors.length; i++) {
-    while (backgroundColors[i].length < 27) {
+    while (backgroundColors[i].length < 28) {
       backgroundColors[i].push("#ffffff");
     }
   }
 
-  const issuesToUpdate = []; // We will build a 2D array for column AA (index 26)
-
-  // Start with existing issues, we will mutate it
+  const issuesToUpdate = []; 
   for (let i = 0; i < data.length; i++) {
     issuesToUpdate.push([data[i][26] || ""]);
   }
 
   let hasChanges = false;
 
-  for (let i = 1; i < data.length; i++) { // Skip header
-    const applyMethod = data[i][6];  // G
-    const applyEmail = data[i][7];   // H
-    const company = data[i][2];      // C
-    const title = data[i][3];        // D
-    const deadline = data[i][12];    // M
-    const mailSent = data[i][24];    // Y
+  for (let i = 1; i < data.length; i++) {
+    const applyMethod = data[i][6];  
+    const applyEmail = data[i][7];   
+    const company = data[i][2];      
+    const title = data[i][3];        
+    const deadline = data[i][12];    
+    const mailSent = data[i][24];    
     
-    // Skip already sent
-    if (mailSent) {
-      continue;
-    }
+    if (mailSent) continue;
 
     if (applyMethod === "Email") {
       let issues = [];
+      
+      // Reset row color to white first (except Score at index 14)
+      for (let j=0; j < backgroundColors[i].length; j++) {
+        backgroundColors[i][j] = "#ffffff"; 
+      }
+      const finalScore = data[i][14];
+      if (finalScore >= 80) backgroundColors[i][14] = "#c6efce";
+      else if (finalScore >= 70) backgroundColors[i][14] = "#ffeb9c";
 
       if (!applyEmail || applyEmail === "N/A" || !isValidEmail(applyEmail)) {
         issues.push("Invalid/Missing Email");
+        backgroundColors[i][7] = "#fce8e6"; // Red cell
       }
       if (!company || company === "N/A") {
         issues.push("Missing Company Name");
+        backgroundColors[i][2] = "#fce8e6";
       }
       if (!title || title === "N/A") {
         issues.push("Missing Job Title");
+        backgroundColors[i][3] = "#fce8e6";
       }
-
-      // Check deadline if present and is date
       if (deadline && deadline !== "N/A" && deadline !== "") {
         let dlDate = new Date(deadline);
         if (!isNaN(dlDate.getTime()) && dlDate < new Date()) {
           issues.push("Deadline Passed");
+          backgroundColors[i][12] = "#fce8e6";
         }
       }
 
       if (issues.length > 0) {
-        // Has issue - set entire row to red
-        for (let j=0; j < data[0].length; j++) {
-            backgroundColors[i][j] = "#fce8e6"; // light red
-        }
         issuesToUpdate[i][0] = issues.join(", ");
         hasChanges = true;
       } else {
-        // Valid, clear previous flags
-        if (issuesToUpdate[i][0] !== "" || backgroundColors[i][0] === "#fce8e6") {
-          // Reset row color to white
-          for (let j=0; j < data[0].length; j++) {
-              backgroundColors[i][j] = "#ffffff"; 
-          }
-          // Restore score cell color (column O, index 14) 
-          const finalScore = data[i][14];
-          if (finalScore >= 80) backgroundColors[i][14] = "#c6efce";
-          else if (finalScore >= 70) backgroundColors[i][14] = "#ffeb9c";
-          
+        if (issuesToUpdate[i][0] !== "") {
           issuesToUpdate[i][0] = "";
           hasChanges = true;
         }
@@ -1052,11 +1001,10 @@ function runAudit() {
   }
 
   if (hasChanges) {
-    // Write back backgrounds and audit issues in batch
     sheet.getDataRange().setBackgrounds(backgroundColors);
-    sheet.getRange(1, 27, issuesToUpdate.length, 1).setValues(issuesToUpdate); // AA is col 27
-    SpreadsheetApp.getUi().alert("✅ রো যাচাই সম্পন্ন হয়েছে! যেকোনো ত্রুটি লাল রঙে চিহ্নিত করা হয়েছে।");
+    sheet.getRange(1, 27, issuesToUpdate.length, 1).setValues(issuesToUpdate);
+    if (showAlert) SpreadsheetApp.getUi().alert("✅ রো যাচাই সম্পন্ন হয়েছে! অসম্পূর্ণ ফিল্ডগুলো লাল রঙে চিহ্নিত করা হয়েছে।");
   } else {
-    SpreadsheetApp.getUi().alert("✅ রো যাচাই সম্পন্ন হয়েছে! কোনো ত্রুটি পাওয়া যায়নি।");
+    if (showAlert) SpreadsheetApp.getUi().alert("✅ রো যাচাই সম্পন্ন হয়েছে! কোনো ত্রুটি পাওয়া যায়নি।");
   }
 }
