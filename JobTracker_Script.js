@@ -827,10 +827,34 @@ function sendBulkApplicationEmails(payload) {
   }
 
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  const tmplSheet = ss.getSheetByName("Email Template");
-  if (!tmplSheet) throw new Error("'Email Template' tab is missing.");
-  let templateBody = tmplSheet.getRange("A1").getValue();
-  if (!templateBody) throw new Error("Template cell A1 is empty!");
+  
+  // 1. Fetch Template (Check Gmail Draft first, fallback to Sheet)
+  let htmlTemplate = null;
+  let plainTemplate = null;
+
+  try {
+    const drafts = GmailApp.getDrafts();
+    for (let draft of drafts) {
+      let msg = draft.getMessage();
+      if (msg.getSubject().trim().toLowerCase() === "applyflow template") {
+        htmlTemplate = msg.getBody();
+        plainTemplate = msg.getPlainBody() || "";
+        break;
+      }
+    }
+  } catch (e) {
+    console.error("Draft fetch error: " + e.message);
+  }
+
+  // Fallback to Sheet if no draft found
+  if (!htmlTemplate) {
+    const tmplSheet = ss.getSheetByName("Email Template");
+    if (!tmplSheet) throw new Error("কোনো জিমেইল ড্রাফট বা 'Email Template' ট্যাব পাওয়া যায়নি।");
+    let rawText = tmplSheet.getRange("A1").getValue();
+    if (!rawText) throw new Error("টেমপ্লেট সম্পূর্ণ ফাঁকা! জিমেইলে 'ApplyFlow Template' নামের একটি ড্রাফট তৈরি করুন অথবা শিটের A1 সেলে টেমপ্লেট লিখুন।");
+    plainTemplate = String(rawText);
+    htmlTemplate = plainTemplate.replace(/\\n/g, "<br>");
+  }
 
   let attachments = [];
   let attachedFileNames = [];
@@ -864,16 +888,19 @@ function sendBulkApplicationEmails(payload) {
   let errorCount = 0;
 
   for (let job of payload.jobs) {
-    let mergedBody = String(templateBody)
+    let mergedHtmlBody = String(htmlTemplate)
       .replace(/\{{1,2}role\}{1,2}/gi, String(job.title))
       .replace(/\{{1,2}company name\}{1,2}/gi, String(job.company))
       .replace(/\{{1,2}company\}{1,2}/gi, String(job.company));
 
-    let htmlBody = mergedBody.replace(/\\n/g, "<br>");
+    let mergedPlainBody = String(plainTemplate)
+      .replace(/\{{1,2}role\}{1,2}/gi, String(job.title))
+      .replace(/\{{1,2}company name\}{1,2}/gi, String(job.company))
+      .replace(/\{{1,2}company\}{1,2}/gi, String(job.company));
     
     try {
-      GmailApp.sendEmail(job.applyEmail, job.computedSubject, mergedBody, {
-        htmlBody: htmlBody,
+      GmailApp.sendEmail(job.applyEmail, job.computedSubject, mergedPlainBody, {
+        htmlBody: mergedHtmlBody,
         attachments: attachments,
         name: "Md Faysal Ahmed"
       });
