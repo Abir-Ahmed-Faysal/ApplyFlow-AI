@@ -15,133 +15,244 @@ const GROQ_API_KEY = "YOUR_GROQ_API_KEY"; // ← এখানে আপনার
 
 const MY_SKILLS = [
   // Frontend
-  "JavaScript", "TypeScript", "React.js", "Next.js",
-  "Tailwind CSS", "TanStack Query", "Shadcn UI", "Framer Motion",
+  "JavaScript",
+  "TypeScript",
+  "React.js",
+  "Next.js",
+  "Tailwind CSS",
+  "TanStack Query",
+  "Shadcn UI",
+  "Framer Motion",
   // Backend
-  "Node.js", "Express.js", "REST API",
+  "Node.js",
+  "Express.js",
+  "REST API",
   // Database
-  "PostgreSQL", "MongoDB", "Prisma", "Mongoose",
+  "PostgreSQL",
+  "MongoDB",
+  "Prisma",
+  "Mongoose",
   // Auth
-  "JWT", "Better Auth", "Firebase Auth",
+  "JWT",
+  "Better Auth",
+  "Firebase Auth",
   // Tools
-  "Git", "Docker", "Vercel", "Postman", "Google Generative AI",
+  "Git",
+  "Docker",
+  "Vercel",
+  "Postman",
+  "Google Generative AI",
   // Payment / Email
-  "Stripe", "Nodemailer"
+  "Stripe",
+  "Nodemailer",
 ];
 
 const SKILL_ALIASES = {
   // ─── JavaScript ───
-  "js": "JavaScript", "javascript": "JavaScript",
-  "জাভাস্ক্রিপ্ট": "JavaScript", "জেএস": "JavaScript",
-  "vanilla js": "JavaScript", "vanillajs": "JavaScript", "ecmascript": "JavaScript", "es6": "JavaScript",
+  js: "JavaScript",
+  javascript: "JavaScript",
+  জাভাস্ক্রিপ্ট: "JavaScript",
+  জেএস: "JavaScript",
+  "vanilla js": "JavaScript",
+  vanillajs: "JavaScript",
+  ecmascript: "JavaScript",
+  es6: "JavaScript",
 
   // ─── TypeScript ───
-  "ts": "TypeScript", "typescript": "TypeScript", "টাইপস্ক্রিপ্ট": "TypeScript",
+  ts: "TypeScript",
+  typescript: "TypeScript",
+  টাইপস্ক্রিপ্ট: "TypeScript",
 
   // ─── React.js ───
-  "react": "React.js", "reactjs": "React.js", "react js": "React.js",
-  "রিয়েক্ট": "React.js", "ফ্রন্টএন্ড ফ্রেমওয়ার্ক": "React.js",
-  "frontend framework": "React.js", "ui library": "React.js", "ui framework": "React.js",
+  react: "React.js",
+  reactjs: "React.js",
+  "react js": "React.js",
+  রিয়েক্ট: "React.js",
+  "ফ্রন্টএন্ড ফ্রেমওয়ার্ক": "React.js",
+  "frontend framework": "React.js",
+  "ui library": "React.js",
+  "ui framework": "React.js",
 
   // ─── Next.js ───
-  "nextjs": "Next.js", "next js": "Next.js", "next": "Next.js",
-  "ssr": "Next.js", "ssg": "Next.js", "server side rendering": "Next.js",
+  nextjs: "Next.js",
+  "next js": "Next.js",
+  next: "Next.js",
+  ssr: "Next.js",
+  ssg: "Next.js",
+  "server side rendering": "Next.js",
 
   // ─── Tailwind CSS ───
-  "tailwind": "Tailwind CSS", "tailwindcss": "Tailwind CSS", "tailwind css": "Tailwind CSS",
-  "css framework": "Tailwind CSS", "utility css": "Tailwind CSS",
+  tailwind: "Tailwind CSS",
+  tailwindcss: "Tailwind CSS",
+  "tailwind css": "Tailwind CSS",
+  "css framework": "Tailwind CSS",
+  "utility css": "Tailwind CSS",
 
   // ─── Shadcn UI ───
-  "shadcn": "Shadcn UI", "shadcnui": "Shadcn UI", "shadcn ui": "Shadcn UI",
-  "component library": "Shadcn UI", "ui components": "Shadcn UI",
+  shadcn: "Shadcn UI",
+  shadcnui: "Shadcn UI",
+  "shadcn ui": "Shadcn UI",
+  "component library": "Shadcn UI",
+  "ui components": "Shadcn UI",
 
   // ─── Framer Motion ───
-  "framer": "Framer Motion", "framermotion": "Framer Motion", "animation library": "Framer Motion",
-  "css animation": "Framer Motion", "web animation": "Framer Motion",
+  framer: "Framer Motion",
+  framermotion: "Framer Motion",
+  "animation library": "Framer Motion",
+  "css animation": "Framer Motion",
+  "web animation": "Framer Motion",
 
   // ─── TanStack Query ───
-  "tanstack": "TanStack Query", "react query": "TanStack Query",
-  "tanstackquery": "TanStack Query", "data fetching": "TanStack Query",
+  tanstack: "TanStack Query",
+  "react query": "TanStack Query",
+  tanstackquery: "TanStack Query",
+  "data fetching": "TanStack Query",
 
   // ─── Node.js ───
-  "node": "Node.js", "nodejs": "Node.js", "node js": "Node.js",
-  "নোড": "Node.js", "backend runtime": "Node.js", "backend framework": "Node.js",
+  node: "Node.js",
+  nodejs: "Node.js",
+  "node js": "Node.js",
+  নোড: "Node.js",
+  "backend runtime": "Node.js",
+  "backend framework": "Node.js",
   "server side js": "Node.js",
 
   // ─── Express.js ───
-  "express": "Express.js", "expressjs": "Express.js", "express js": "Express.js",
-  "web framework": "Express.js", "http framework": "Express.js",
+  express: "Express.js",
+  expressjs: "Express.js",
+  "express js": "Express.js",
+  "web framework": "Express.js",
+  "http framework": "Express.js",
 
   // ─── REST API ───
-  "rest": "REST API", "restful": "REST API", "restful api": "REST API",
-  "api": "REST API", "web api": "REST API", "http api": "REST API",
-  "api development": "REST API", "api design": "REST API",
+  rest: "REST API",
+  restful: "REST API",
+  "restful api": "REST API",
+  api: "REST API",
+  "web api": "REST API",
+  "http api": "REST API",
+  "api development": "REST API",
+  "api design": "REST API",
 
   // ─── PostgreSQL ───
-  "postgres": "PostgreSQL", "postgresql": "PostgreSQL",
-  "sql": "PostgreSQL", "rdbms": "PostgreSQL", "relational database": "PostgreSQL",
-  "পোস্টগ্রেস": "PostgreSQL", "relational db": "PostgreSQL",
+  postgres: "PostgreSQL",
+  postgresql: "PostgreSQL",
+  sql: "PostgreSQL",
+  rdbms: "PostgreSQL",
+  "relational database": "PostgreSQL",
+  পোস্টগ্রেস: "PostgreSQL",
+  "relational db": "PostgreSQL",
 
   // ─── MongoDB ───
-  "mongo": "MongoDB", "mongodb": "MongoDB",
-  "nosql": "MongoDB", "document database": "MongoDB", "document db": "MongoDB",
-  "মঙ্গোডিবি": "MongoDB", "no sql": "MongoDB",
+  mongo: "MongoDB",
+  mongodb: "MongoDB",
+  nosql: "MongoDB",
+  "document database": "MongoDB",
+  "document db": "MongoDB",
+  মঙ্গোডিবি: "MongoDB",
+  "no sql": "MongoDB",
 
   // ─── Prisma ───
-  "prisma": "Prisma", "prismaorm": "Prisma", "prisma orm": "Prisma",
-  "orm": "Prisma", "database orm": "Prisma", "query builder": "Prisma",
+  prisma: "Prisma",
+  prismaorm: "Prisma",
+  "prisma orm": "Prisma",
+  orm: "Prisma",
+  "database orm": "Prisma",
+  "query builder": "Prisma",
 
   // ─── Mongoose ───
-  "mongoose": "Mongoose", "mongo orm": "Mongoose", "mongodb odm": "Mongoose", "odm": "Mongoose",
+  mongoose: "Mongoose",
+  "mongo orm": "Mongoose",
+  "mongodb odm": "Mongoose",
+  odm: "Mongoose",
 
   // ─── JWT ───
-  "jwt": "JWT", "json web token": "JWT", "jsonwebtoken": "JWT",
-  "token auth": "JWT", "bearer token": "JWT",
+  jwt: "JWT",
+  "json web token": "JWT",
+  jsonwebtoken: "JWT",
+  "token auth": "JWT",
+  "bearer token": "JWT",
 
   // ─── Authentication (General) ───
-  "authentication": "JWT", "auth": "JWT", "authorization": "JWT",
-  "অথেনটিকেশন": "JWT", "লগইন সিস্টেম": "JWT",
+  authentication: "JWT",
+  auth: "JWT",
+  authorization: "JWT",
+  অথেনটিকেশন: "JWT",
+  "লগইন সিস্টেম": "JWT",
 
   // ─── Better Auth ───
-  "betterauth": "Better Auth", "better auth": "Better Auth",
+  betterauth: "Better Auth",
+  "better auth": "Better Auth",
 
   // ─── Firebase Auth ───
-  "firebase": "Firebase Auth", "firebaseauth": "Firebase Auth", "firebase auth": "Firebase Auth",
-  "google auth": "Firebase Auth", "social login": "Firebase Auth",
-  "oauth": "Firebase Auth", "oauth2": "Firebase Auth",
+  firebase: "Firebase Auth",
+  firebaseauth: "Firebase Auth",
+  "firebase auth": "Firebase Auth",
+  "google auth": "Firebase Auth",
+  "social login": "Firebase Auth",
+  oauth: "Firebase Auth",
+  oauth2: "Firebase Auth",
 
   // ─── Git ───
-  "git": "Git", "github": "Git", "gitlab": "Git", "bitbucket": "Git",
-  "version control": "Git", "source control": "Git", "vcs": "Git",
-  "গিট": "Git",
+  git: "Git",
+  github: "Git",
+  gitlab: "Git",
+  bitbucket: "Git",
+  "version control": "Git",
+  "source control": "Git",
+  vcs: "Git",
+  গিট: "Git",
 
   // ─── Docker ───
-  "docker": "Docker", "containerization": "Docker", "container": "Docker",
-  "dockerfile": "Docker", "docker compose": "Docker", "containers": "Docker",
+  docker: "Docker",
+  containerization: "Docker",
+  container: "Docker",
+  dockerfile: "Docker",
+  "docker compose": "Docker",
+  containers: "Docker",
 
   // ─── Vercel ───
-  "vercel": "Vercel", "deployment": "Vercel", "cloud deployment": "Vercel",
-  "hosting": "Vercel", "ci cd": "Vercel", "cicd": "Vercel",
+  vercel: "Vercel",
+  deployment: "Vercel",
+  "cloud deployment": "Vercel",
+  hosting: "Vercel",
+  "ci cd": "Vercel",
+  cicd: "Vercel",
 
   // ─── Postman ───
-  "postman": "Postman", "api testing": "Postman", "api client": "Postman",
+  postman: "Postman",
+  "api testing": "Postman",
+  "api client": "Postman",
 
   // ─── Google Generative AI ───
-  "google generative ai": "Google Generative AI", "gemini": "Google Generative AI",
-  "google ai": "Google Generative AI", "generative ai": "Google Generative AI",
-  "llm integration": "Google Generative AI", "ai integration": "Google Generative AI",
+  "google generative ai": "Google Generative AI",
+  gemini: "Google Generative AI",
+  "google ai": "Google Generative AI",
+  "generative ai": "Google Generative AI",
+  "llm integration": "Google Generative AI",
+  "ai integration": "Google Generative AI",
 
   // ─── Stripe ───
-  "stripe": "Stripe", "payment gateway": "Stripe", "payment integration": "Stripe",
-  "online payment": "Stripe", "payment api": "Stripe", "পেমেন্ট": "Stripe",
+  stripe: "Stripe",
+  "payment gateway": "Stripe",
+  "payment integration": "Stripe",
+  "online payment": "Stripe",
+  "payment api": "Stripe",
+  পেমেন্ট: "Stripe",
 
   // ─── Nodemailer ───
-  "nodemailer": "Nodemailer", "email service": "Nodemailer", "smtp": "Nodemailer",
-  "email integration": "Nodemailer", "transactional email": "Nodemailer",
+  nodemailer: "Nodemailer",
+  "email service": "Nodemailer",
+  smtp: "Nodemailer",
+  "email integration": "Nodemailer",
+  "transactional email": "Nodemailer",
 
   // ─── বাংলা সাধারণ ───
-  "ফুল স্ট্যাক": "JavaScript", "ব্যাকএন্ড": "Node.js", "ফ্রন্টএন্ড": "React.js",
-  "ডেটাবেস": "MongoDB", "ক্লাউড": "Vercel"
+  "ফুল স্ট্যাক": "JavaScript",
+  ব্যাকএন্ড: "Node.js",
+  ফ্রন্টএন্ড: "React.js",
+  ডেটাবেস: "MongoDB",
+  ক্লাউড: "Vercel",
 };
 
 const MIN_SCORE = 70; // ৭০% এর নিচে স্কিপ করবে
@@ -164,7 +275,8 @@ function onOpen() {
 // সার্কুলার ইনপুট ডায়ালগ
 // ============================================================
 function showCircularDialog() {
-  const html = HtmlService.createHtmlOutput(`
+  const html = HtmlService.createHtmlOutput(
+    `
     <!DOCTYPE html>
     <html>
     <head>
@@ -263,10 +375,11 @@ function showCircularDialog() {
       </script>
     </body>
     </html>
-  `)
-  .setWidth(520)
-  .setHeight(480)
-  .setTitle("🤖 জব সার্কুলার বিশ্লেষণ");
+  `,
+  )
+    .setWidth(520)
+    .setHeight(480)
+    .setTitle("🤖 জব সার্কুলার বিশ্লেষণ");
 
   SpreadsheetApp.getUi().showModalDialog(html, "🤖 জব সার্কুলার বিশ্লেষণ");
 }
@@ -281,34 +394,47 @@ function analyzeAndAddJob(circularText, applyLink, platform) {
     const jobData = parseAIResponse(aiResult);
 
     // ── দুটো স্কোর আলাদা হিসাব ──
-    const codeScore  = calculateMatchScore(jobData.requiredSkills, jobData.experienceYears);
-    const geminiScore = Math.max(0, Math.min(100, Math.round(Number(jobData.geminiScore) || 0)));
+    const codeScore = calculateMatchScore(
+      jobData.requiredSkills,
+      jobData.experienceYears,
+    );
+    const geminiScore = Math.max(
+      0,
+      Math.min(100, Math.round(Number(jobData.geminiScore) || 0)),
+    );
 
     // ── experience hard-cutoff (code logic থেকে) ──
     if (jobData.experienceYears >= 4) {
       return {
         added: false,
-        message: `অভিজ্ঞতা ${jobData.experienceYears} বছর — ৪+ বছর হওয়ায় স্কিপ করা হয়েছে।`
+        message: `অভিজ্ঞতা ${jobData.experienceYears} বছর — ৪+ বছর হওয়ায় স্কিপ করা হয়েছে।`,
       };
     }
 
     // ── ফাইনাল স্কোর = Weighted (Gemini 70% + Code 30%) ──
-    const finalScore = Math.round((geminiScore * 0.7) + (codeScore * 0.3));
+    const finalScore = Math.round(geminiScore * 0.7 + codeScore * 0.3);
 
     if (finalScore < MIN_SCORE) {
       return {
         added: false,
-        message: `ফাইনাল স্কোর ${finalScore}% (Code: ${codeScore}% | AI: ${geminiScore}%) — ৭০%-এর নিচে, স্কিপ করা হয়েছে।`
+        message: `ফাইনাল স্কোর ${finalScore}% (Code: ${codeScore}% | AI: ${geminiScore}%) — ৭০%-এর নিচে, স্কিপ করা হয়েছে।`,
       };
     }
 
-    addRowToSheet(jobData, finalScore, codeScore, geminiScore, circularText, applyLink, platform);
+    addRowToSheet(
+      jobData,
+      finalScore,
+      codeScore,
+      geminiScore,
+      circularText,
+      applyLink,
+      platform,
+    );
 
     return {
       added: true,
-      message: `✅ স্কোর ${finalScore}% (Code: ${codeScore}% | AI: ${geminiScore}%) — "${jobData.company}" এ "${jobData.title}" সফলভাবে যোগ হয়েছে!`
+      message: `✅ স্কোর ${finalScore}% (Code: ${codeScore}% | AI: ${geminiScore}%) — "${jobData.company}" এ "${jobData.title}" সফলভাবে যোগ হয়েছে!`,
     };
-
   } catch (e) {
     throw new Error(e.message);
   }
@@ -324,15 +450,15 @@ function callGeminiAPI(prompt) {
     model: "llama-3.3-70b-versatile",
     messages: [{ role: "user", content: prompt }],
     temperature: 0.1,
-    max_tokens: 1000
+    max_tokens: 1000,
   };
 
   const options = {
     method: "POST",
     contentType: "application/json",
-    headers: { "Authorization": "Bearer " + GROQ_API_KEY },
+    headers: { Authorization: "Bearer " + GROQ_API_KEY },
     payload: JSON.stringify(payload),
-    muteHttpExceptions: true
+    muteHttpExceptions: true,
   };
 
   const response = UrlFetchApp.fetch(url, options);
@@ -429,7 +555,8 @@ function calculateMatchScore(requiredSkills, experienceYears) {
 }
 
 function normalizeSkill(skill) {
-  return skill.toLowerCase()
+  return skill
+    .toLowerCase()
     .replace(/[.\-_]/g, "")
     .replace(/\s+/g, " ")
     .trim();
@@ -446,13 +573,27 @@ function isSkillMatched(normalizedReqSkill) {
   if (aliasMatch && MY_SKILLS.includes(aliasMatch)) return true;
 
   // ধাপ ৩: আংশিক মিল — false positive এড়াতে সতর্ক (Java ≠ JavaScript)
-  const EXACT_ONLY = ["java", "c", "c++", "c#", "go", "rust", "ruby", "swift", "kotlin"];
+  const EXACT_ONLY = [
+    "java",
+    "c",
+    "c++",
+    "c#",
+    "go",
+    "rust",
+    "ruby",
+    "swift",
+    "kotlin",
+  ];
   if (EXACT_ONLY.includes(normalizedReqSkill)) return false;
 
   for (const mySkill of MY_SKILLS) {
     const myNorm = normalizeSkill(mySkill);
     if (normalizedReqSkill.length >= 4 && myNorm.length >= 4) {
-      if (myNorm.startsWith(normalizedReqSkill) || normalizedReqSkill.startsWith(myNorm)) return true;
+      if (
+        myNorm.startsWith(normalizedReqSkill) ||
+        normalizedReqSkill.startsWith(myNorm)
+      )
+        return true;
     }
   }
 
@@ -462,7 +603,15 @@ function isSkillMatched(normalizedReqSkill) {
 // ============================================================
 // Google Sheet-এ রো যোগ করা
 // ============================================================
-function addRowToSheet(jobData, finalScore, codeScore, geminiScore, circularText, applyLink, platform) {
+function addRowToSheet(
+  jobData,
+  finalScore,
+  codeScore,
+  geminiScore,
+  circularText,
+  applyLink,
+  platform,
+) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const sheet = ss.getSheetByName("Applications");
 
@@ -472,7 +621,11 @@ function addRowToSheet(jobData, finalScore, codeScore, geminiScore, circularText
   const newRow = lastRow + 1;
   const nextId = lastRow - 1; // হেডার বাদ দিয়ে
 
-  const today = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "dd MMM");
+  const today = Utilities.formatDate(
+    new Date(),
+    Session.getScriptTimeZone(),
+    "dd MMM",
+  );
 
   // স্কোর নোট — breakdown সহ
   let scoreLabel = "";
@@ -488,47 +641,53 @@ function addRowToSheet(jobData, finalScore, codeScore, geminiScore, circularText
   const finalApplyLink = applyLink || jobData.applyLink || "N/A";
   const finalApplyEmail = jobData.applyEmail || "N/A";
   const applyMethod = finalApplyEmail !== "N/A" ? "Email" : "Link";
-  const applyContact = finalApplyEmail !== "N/A"
-    ? finalApplyEmail
-    : finalApplyLink;
+  const applyContact =
+    finalApplyEmail !== "N/A" ? finalApplyEmail : finalApplyLink;
 
   const rowData = [
-    nextId,                                    // A: No.
-    today,                                     // B: Applied Date
-    jobData.company || "N/A",                 // C: Company Name
-    jobData.title || "N/A",                   // D: Job Title
-    jobData.jobType || "Full-time",           // E: Job Type
-    platform || "Direct",                     // F: Platform
-    applyMethod,                               // G: Apply Method (Email or Link)
-    applyContact,                             // H: Apply Link / Email
-    jobData.workMode || "N/A",               // I: Work Mode
-    jobData.location || "N/A",               // J: Location
-    jobData.salary || "N/A",                 // K: Salary
+    nextId, // A: No.
+    today, // B: Applied Date
+    jobData.company || "N/A", // C: Company Name
+    jobData.title || "N/A", // D: Job Title
+    jobData.jobType || "Full-time", // E: Job Type
+    platform || "Direct", // F: Platform
+    applyMethod, // G: Apply Method (Email or Link)
+    applyContact, // H: Apply Link / Email
+    jobData.workMode || "N/A", // I: Work Mode
+    jobData.location || "N/A", // J: Location
+    jobData.salary || "N/A", // K: Salary
     jobData.experienceYears + " yrs" || "N/A", // L: Experience
-    jobData.deadline || "N/A",               // M: Deadline
-    "Skills: " + (jobData.requiredSkills || []).join(", ") + " | Resp: " + (jobData.responsibilities || ""), // N: Key Info
-    finalScore,                               // O: Match Score (Final = গড়)
-    scoreNote,                                // P: Score Notes (breakdown)
-    status,                                   // Q: Application Status
-    "No",                                     // R: Response
-    "",                                       // S: Follow-up Date
-    "",                                       // T: Interview Date
-    "",                                       // U: Recruiter Name
-    "",                                       // V: Referred By
-    "",                                       // W: Contact / WhatsApp No.
-    "",                                       // X: Notes
-    "",                                       // Y: Mail Sent
-    jobData.customSubjectInstruction && jobData.customSubjectInstruction !== "N/A" ? jobData.customSubjectInstruction : "Default", // Z: Subject Format
-    "",                                       // AA: Audit Issue
-    ""                                        // AB: Attached Files
+    jobData.deadline || "N/A", // M: Deadline
+    "Skills: " +
+      (jobData.requiredSkills || []).join(", ") +
+      " | Resp: " +
+      (jobData.responsibilities || ""), // N: Key Info
+    finalScore, // O: Match Score (Final = গড়)
+    scoreNote, // P: Score Notes (breakdown)
+    status, // Q: Application Status
+    "No", // R: Response
+    "", // S: Follow-up Date
+    "", // T: Interview Date
+    "", // U: Recruiter Name
+    "", // V: Referred By
+    "", // W: Contact / WhatsApp No.
+    "", // X: Notes
+    "", // Y: Mail Sent
+    jobData.customSubjectInstruction &&
+    jobData.customSubjectInstruction !== "N/A"
+      ? jobData.customSubjectInstruction
+      : "Default", // Z: Subject Format
+    "", // AA: Audit Issue
+    "", // AB: Attached Files
   ];
 
   sheet.getRange(newRow, 1, 1, rowData.length).setValues([rowData]);
 
   // ফাইনাল স্কোর অনুযায়ী রঙ
   const scoreCell = sheet.getRange(newRow, 15);
-  if (finalScore >= 80) scoreCell.setBackground("#c6efce");       // সবুজ
-  else if (finalScore >= 70) scoreCell.setBackground("#ffeb9c");  // হলুদ
+  if (finalScore >= 80)
+    scoreCell.setBackground("#c6efce"); // সবুজ
+  else if (finalScore >= 70) scoreCell.setBackground("#ffeb9c"); // হলুদ
 }
 
 // ============================================================
@@ -564,7 +723,7 @@ Extensions > Apps Script > কোড এডিট করুন
 // ============================================================
 function autoSetup() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  
+
   // 1. Setup Applications Tab Columns
   let appSheet = ss.getSheetByName("Applications");
   if (appSheet) {
@@ -573,71 +732,74 @@ function autoSetup() {
     appSheet.getRange("AA1").setValue("Audit Issue");
     appSheet.getRange("AB1").setValue("Attached Files");
   }
-  
+
   // 2. Setup Email Template Tab — Fixed: full professional template
   let tmplSheet = ss.getSheetByName("Email Template");
   if (!tmplSheet) {
     tmplSheet = ss.insertSheet("Email Template");
   }
 
+  // NOTE: This is a reference copy only.
+  // Your REAL template lives in Gmail Drafts with subject: "ApplyFlow Template"
+  // The placeholders used: {{position}}, {{company name}}, {{role}}
   const emailTemplate =
-    "Dear Hiring Team at {{company}},\n\n" +
-    "I am writing to express my interest in the {{role}} position at {{company}}. As a self-taught Full-Stack (MERN) Developer based in Dhaka, Bangladesh, I am confident that my skills and projects align well with what you are looking for.\n\n" +
-    "I have hands-on experience building production-ready web applications using JavaScript, TypeScript, React.js, Next.js, Node.js, Express.js, MongoDB, PostgreSQL, and Prisma. Two of my key projects include:\n\n" +
-    "• MediStore — An AI-powered medicine e-commerce platform featuring Google Generative AI integration, multi-role authentication (JWT), PostgreSQL/Prisma backend, and TanStack Query on the frontend.\n\n" +
-    "• Sustainify — A community platform with Stripe payment integration, Reddit-style voting, and Cron job automation for scheduled tasks.\n\n" +
-    "I am available immediately (within 1-2 days of offer) and open to remote, onsite, or hybrid roles. Please find my CV attached for your review.\n\n" +
-    "Looking forward to hearing from you.\n\n" +
+    "Dear Hiring Team,\n\n" +
+    "I am excited to apply for the {{position}} position at {{company name}}.\n\n" +
+    "Please find attached my resume and cover letter for your review. I have strong experience with the {{role}} stack and am eager to contribute to your team.\n\n" +
+    "Thank you for your time and consideration.\n\n" +
     "Best regards,\n" +
-    "Md Faysal Ahmed\n" +
-    "Full-Stack Developer (MERN)\n" +
-    "Phone / WhatsApp: +8801779161032\n" +
-    "GitHub: https://github.com/faysalabir779";
+    "--\n\n" +
+    "  Md Faysal Ahmed\n" +
+    "  {{role}}\n" +
+    "  P: +8801779161032\n" +
+    "  LinkedIn | Facebook | GitHub";
 
   tmplSheet.getRange("A1").setValue(emailTemplate);
   tmplSheet.setColumnWidth(1, 600);
-  
-  SpreadsheetApp.getUi().alert("Setup complete! New columns added to Applications tab and Email Template tab is ready.");
+
+  SpreadsheetApp.getUi().alert(
+    "Setup complete! New columns added to Applications tab and Email Template tab is ready.",
+  );
 }
 
 // ============================================================
 // ইমেইল পাঠান (Mail Merge) - ডায়ালগ
 // ============================================================
 function showSendDialog() {
-  const html = HtmlService.createHtmlOutput(`
+  const html = HtmlService.createHtmlOutput(
+    `
 <!DOCTYPE html>
 <html>
 <head>
   <style>
-    body { font-family: Arial, sans-serif; padding: 15px; background: #f9f9f9; }
+    body { font-family: Arial, sans-serif; padding: 15px; background: #f9f9f9; overflow-y: auto; }
     h2 { color: #1a73e8; margin-bottom: 5px; margin-top: 0; }
     p { color: #555; font-size: 13px; margin-bottom: 15px; }
-    label { font-size: 13px; color: #333; font-weight: bold; display: block; margin-bottom: 4px; margin-top: 10px;}
-    select, input[type="file"] { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 6px; font-size: 13px; box-sizing: border-box; }
+    label { font-size: 12px; color: #333; font-weight: bold; display: block; margin-bottom: 3px; margin-top: 8px;}
+    select, input[type="file"] { width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; box-sizing: border-box; }
     .btn-primary { background: #1a73e8; color: white; width: 100%; margin-top: 15px; padding: 10px 20px; border: none; border-radius: 6px; font-size: 14px; cursor: pointer; font-weight: bold; }
     .btn-primary:hover:not(:disabled) { background: #1558b0; }
     .btn-primary:disabled { background: #ccc; cursor: not-allowed; }
     .summary-box { background: #e8f0fe; padding: 12px; border: 1px solid #c6dafc; border-radius: 6px; margin-bottom: 15px; font-size: 13px; color: #1a73e8; }
+    .job-row { background: white; border: 1px solid #e0e0e0; border-radius: 6px; padding: 12px; margin-bottom: 12px; }
+    .job-title { font-weight: bold; color: #1a73e8; font-size: 13px; margin-bottom: 10px; }
+    .file-row { display: flex; gap: 8px; margin-bottom: 10px; }
+    .file-col { flex: 1; }
+    .file-col label { margin-top: 0; }
     #status { margin-top: 12px; padding: 10px; border-radius: 6px; font-size: 13px; display: none; text-align: center; }
     .loading { background: #e8f0fe; color: #1a73e8; }
     .success { background: #e6f4ea; color: #137333; }
     .error   { background: #fce8e6; color: #c5221f; }
+    #jobsContainer { max-height: 400px; overflow-y: auto; border: 1px solid #ddd; border-radius: 6px; padding: 10px; background: white; }
   </style>
 </head>
 <body>
   <h2>🚀 Bulk Apply (ApplyFlow AI)</h2>
   <div class="summary-box" id="summaryBox">⏳ ডেটা লোড এবং অডিট করা হচ্ছে...</div>
 
-  <label>Resume / CV (সবগুলোর জন্য একটি) *</label>
-  <select id="resumeSelect" onchange="toggleResumeUpload()">
-    <option value="">-- লোড হচ্ছে... --</option>
-  </select>
-  <input type="file" id="resumeUpload" style="display:none;" accept=".pdf,.doc,.docx" />
+  <div id="jobsContainer">⏳ লোড করছে...</div>
 
-  <label>Additional File (Optional)</label>
-  <input type="file" id="additionalUpload" />
-
-  <button class="btn-primary" id="sendBtn" onclick="sendEmails()" disabled>📧 ইমেইল পাঠানো শুরু করুন</button>
+  <button class="btn-primary" id="sendBtn" onclick="sendEmails()" disabled>📧 সবাইকে ইমেইল পাঠান</button>
 
   <div id="status"></div>
 
@@ -655,23 +817,31 @@ function showSendDialog() {
         summaryBox.innerHTML = \`পেন্ডিং কোনো জব নেই অথবা সবগুলোর তথ্য অসম্পূর্ণ। <b>\${data.invalidCount}</b> টি জবে ভুল/অসম্পূর্ণ তথ্য রয়েছে যা লাল রঙে মার্ক করা হয়েছে।\`;
         document.getElementById('sendBtn').disabled = true;
       } else {
-        summaryBox.innerHTML = \`<b>\${validJobs.length}</b> টি জব রেডি আছে। (সর্বোচ্চ ১০টি একসাথে)।<br><br><b>\${data.invalidCount}</b> টি অসম্পূর্ণ জব লাল রঙে মার্ক করে স্কিপ করা হয়েছে।\`;
+        summaryBox.innerHTML = \`<b>\${validJobs.length}</b> টি জব রেডি আছে। প্রতিটির জন্য আলাদা ফাইল সিলেক্ট করুন।\`;
         document.getElementById('sendBtn').disabled = false;
       }
 
-      const resumeSelect = document.getElementById('resumeSelect');
-      resumeSelect.innerHTML = '<option value="">-- সিলেক্ট করুন --</option><option value="upload">📤 নিজের ফাইল আপলোড করুন...</option>';
-      data.resumes.forEach(res => {
-        const opt = document.createElement('option');
-        opt.value = res.url;
-        opt.textContent = res.name;
-        resumeSelect.appendChild(opt);
+      // Build jobs container with file pickers
+      const container = document.getElementById('jobsContainer');
+      container.innerHTML = '';
+      validJobs.forEach((job, idx) => {
+        const jobDiv = document.createElement('div');
+        jobDiv.className = 'job-row';
+        jobDiv.innerHTML = \`
+          <div class="job-title">\${idx + 1}. \${job.company} - \${job.title}</div>
+          <div class="file-row">
+            <div class="file-col">
+              <label>CV / Resume</label>
+              <input type="file" class="jobCvFile" data-jobidx="\${idx}" accept=".pdf,.doc,.docx" />
+            </div>
+            <div class="file-col">
+              <label>Additional</label>
+              <input type="file" class="jobAddFile" data-jobidx="\${idx}" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" />
+            </div>
+          </div>
+        \`;
+        container.appendChild(jobDiv);
       });
-    }
-
-    function toggleResumeUpload() {
-      const val = document.getElementById('resumeSelect').value;
-      document.getElementById('resumeUpload').style.display = val === 'upload' ? 'block' : 'none';
     }
 
     function onError(err) {
@@ -688,40 +858,43 @@ function showSendDialog() {
     async function sendEmails() {
       if (validJobs.length === 0) return;
 
-      const resVal = document.getElementById('resumeSelect').value;
-      const resFile = document.getElementById('resumeUpload').files[0];
-      const addFile = document.getElementById('additionalUpload').files[0];
-
-      if (!resVal && !resFile) {
-        if (!confirm("আপনি কোনো Resume/CV সিলেক্ট করেননি! তবুও কি পাঠাতে চান?")) return;
-      }
-
-      showStatus('⏳ ইমেইল পাঠানো হচ্ছে (Bulk Send)...', 'loading');
+      showStatus('⏳ সব ফাইল প্রসেস করছি...', 'loading');
       document.getElementById('sendBtn').disabled = true;
 
       try {
-        let payload = {
-          jobs: validJobs,
-          resumeUrl: (resVal !== 'upload') ? resVal : null,
-          resumeBase64: null,
-          resumeMime: null,
-          resumeName: null,
-          addBase64: null,
-          addMime: null,
-          addName: null
-        };
+        // Collect job-specific attachments
+        let jobsWithAttachments = [];
+        for (let i = 0; i < validJobs.length; i++) {
+          const cvInput = document.querySelector(\`.jobCvFile[data-jobidx="\${i}"]\`);
+          const addInput = document.querySelector(\`.jobAddFile[data-jobidx="\${i}"]\`);
+          
+          let cvBase64 = null, cvMime = null, cvName = null;
+          let addBase64 = null, addMime = null, addName = null;
 
-        if (resVal === 'upload' && resFile) {
-          payload.resumeBase64 = await readFileAsBase64(resFile);
-          payload.resumeMime = resFile.type;
-          payload.resumeName = resFile.name;
+          if (cvInput && cvInput.files[0]) {
+            cvBase64 = await readFileAsBase64(cvInput.files[0]);
+            cvMime = cvInput.files[0].type;
+            cvName = cvInput.files[0].name;
+          }
+
+          if (addInput && addInput.files[0]) {
+            addBase64 = await readFileAsBase64(addInput.files[0]);
+            addMime = addInput.files[0].type;
+            addName = addInput.files[0].name;
+          }
+
+          jobsWithAttachments.push({
+            ...validJobs[i],
+            cvBase64,
+            cvMime,
+            cvName,
+            addBase64,
+            addMime,
+            addName
+          });
         }
 
-        if (addFile) {
-          payload.addBase64 = await readFileAsBase64(addFile);
-          payload.addMime = addFile.type;
-          payload.addName = addFile.name;
-        }
+        showStatus('⏳ ইমেইল পাঠানো হচ্ছে (Bulk Send)...', 'loading');
 
         google.script.run
           .withSuccessHandler(res => {
@@ -732,10 +905,10 @@ function showSendDialog() {
             showStatus('❌ ' + err.message, 'error');
             document.getElementById('sendBtn').disabled = false;
           })
-          .sendBulkApplicationEmails(payload);
+          .sendBulkApplicationEmails({ jobs: jobsWithAttachments });
 
       } catch (e) {
-        showStatus('❌ Error processing files', 'error');
+        showStatus('❌ Error processing files: ' + e.message, 'error');
         document.getElementById('sendBtn').disabled = false;
       }
     }
@@ -751,11 +924,13 @@ function showSendDialog() {
   </script>
 </body>
 </html>
-  `)
-  .setWidth(500).setHeight(500).setTitle("🚀 Bulk Apply (ApplyFlow AI)");
+  `,
+  )
+    .setWidth(600)
+    .setHeight(800)
+    .setTitle("🚀 Bulk Apply (ApplyFlow AI)");
   SpreadsheetApp.getUi().showModalDialog(html, "🚀 Bulk Apply");
 }
-
 
 // ============================================================
 // Get Dialog Data (Server-Side)
@@ -763,9 +938,9 @@ function showSendDialog() {
 function getSendDialogData() {
   // ১. ডায়ালগ ওপেন হওয়ার আগেই Audit রান করবে (যাতে লাল রঙ আপডেট হয়ে যায়)
   runAudit(false); // false means no popup alert
-  
+
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  
+
   // Get Resumes from Quick Reference tab
   const qrSheet = ss.getSheetByName("Quick Reference");
   let resumes = [];
@@ -783,39 +958,34 @@ function getSendDialogData() {
   // Get Pending Jobs
   const appSheet = ss.getSheetByName("Applications");
   if (!appSheet) throw new Error("Applications sheet not found.");
-  
+
   const appData = appSheet.getDataRange().getValues();
   let jobs = [];
   let invalidCount = 0;
-  
+
   for (let i = 1; i < appData.length; i++) {
     const applyMethod = String(appData[i][6] || "").trim(); // G
-    const applyEmail = String(appData[i][7] || "").trim();  // H
-    const company = String(appData[i][2] || "").trim();     // C
-    const title = String(appData[i][3] || "").trim();       // D
-    const mailSent = appData[i][24];   // Y
-    const subjectFormat = appData[i][25] ? String(appData[i][25]).trim() : "Default"; // Z
+    const applyEmail = String(appData[i][7] || "").trim(); // H
+    const company = String(appData[i][2] || "").trim(); // C
+    const title = String(appData[i][3] || "").trim(); // D
+    const mailSent = appData[i][24]; // Y
+    const subjectFormat = appData[i][25]
+      ? String(appData[i][25]).trim()
+      : "Default"; // Z
     const auditIssue = appData[i][26] ? String(appData[i][26]).trim() : ""; // AA
-    
+
     if (applyMethod === "Email" && !mailSent) {
-      if (auditIssue === "") { // No issues found by runAudit!
-        let computedSubject = "";
-        if (subjectFormat === "Default" || subjectFormat === "N/A" || !subjectFormat) {
-          computedSubject = title + " Application - Md Faysal Ahmed";
-        } else {
-          computedSubject = subjectFormat.replace(/\{{1,2}role\}{1,2}|\[role\]/gi, title);
-          computedSubject = computedSubject.replace(/\[your name\]|\{{1,2}name\}{1,2}|\[name\]/gi, "Md Faysal Ahmed");
-          if (!computedSubject.toLowerCase().includes("faysal")) {
-            computedSubject += " - Md Faysal Ahmed";
-          }
-        }
+      if (auditIssue === "") {
+        // No issues found by runAudit!
+        // ⭐ Use AI-enhanced subject line generation
+        let computedSubject = enhanceSubjectWithAI(title, subjectFormat);
 
         jobs.push({
           rowIndex: i + 1,
           company: company,
           title: title,
           applyEmail: applyEmail,
-          computedSubject: computedSubject
+          computedSubject: computedSubject,
         });
       } else {
         invalidCount++;
@@ -827,23 +997,200 @@ function getSendDialogData() {
 }
 
 function isValidEmail(email) {
-  if (!email || typeof email !== 'string') return false;
+  if (!email || typeof email !== "string") return false;
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()); // ✅ Fixed: removed double-escaped backslashes
 }
 
 // ============================================================
-// Send Bulk Emails Server Function
+// Generate Subject Line using AI (with custom format detection)
 // ============================================================
-function sendBulkApplicationEmails(payload) {
-  if (!payload.jobs || payload.jobs.length === 0) return "কোনো জব সিলেক্ট করা হয়নি।";
+function generateSubjectLine(jobTitle, customInstruction) {
+  let subject = "";
   
+  // 1. If custom instruction from job circular exists, use it
+  if (customInstruction && customInstruction !== "N/A") {
+    subject = customInstruction;
+  } else {
+    // 2. Default format
+    subject = "Application for " + jobTitle;
+  }
+  
+  // 3. Replace role placeholders if any
+  subject = subject
+    .replace(/\[role\]|\{\{role\}\}|\{{1,2}position\}{1,2}/gi, jobTitle)
+    .trim();
+  
+  // 4. Always ensure "- Md Faysal Ahmed" is at the end
+  if (!subject.toLowerCase().includes("md faysal") && !subject.toLowerCase().includes("faysal ahmed")) {
+    subject += " - Md Faysal Ahmed";
+  }
+  
+  return subject;
+}
+
+// ============================================================
+// Validate and Enhance Subject with AI (if custom format needs parsing)
+// ============================================================
+function enhanceSubjectWithAI(jobTitle, customInstruction) {
+  if (!customInstruction || customInstruction === "N/A") {
+    // Use default format
+    return "Application for " + jobTitle + " - Md Faysal Ahmed";
+  }
+  
+  // If API key available, use AI to ensure proper format
+  if (!GROQ_API_KEY || GROQ_API_KEY === "YOUR_GROQ_API_KEY") {
+    return generateSubjectLine(jobTitle, customInstruction);
+  }
+  
+  try {
+    const url = "https://api.groq.com/openai/v1/chat/completions";
+    const payload = {
+      model: "mixtral-8x7b-32768",
+      messages: [
+        {
+          role: "user",
+          content: `Format this email subject line properly. Replace [Role] or {{role}} with "${jobTitle}". 
+Ensure it includes "- Md Faysal Ahmed" at the end if not present.
+
+Original instruction: "${customInstruction}"
+
+Reply with ONLY the formatted subject line, nothing else.`
+        }
+      ],
+      max_tokens: 100,
+      temperature: 0.2
+    };
+    
+    const options = {
+      method: "post",
+      headers: {
+        "Authorization": "Bearer " + GROQ_API_KEY,
+        "Content-Type": "application/json"
+      },
+      payload: JSON.stringify(payload),
+      muteHttpExceptions: true
+    };
+    
+    const response = UrlFetchApp.fetch(url, options);
+    const result = JSON.parse(response.getContentText());
+    
+    if (result.choices && result.choices[0] && result.choices[0].message) {
+      let aiSubject = result.choices[0].message.content.trim();
+      // Ensure name is included
+      if (!aiSubject.toLowerCase().includes("md faysal") && !aiSubject.toLowerCase().includes("faysal ahmed")) {
+        aiSubject += " - Md Faysal Ahmed";
+      }
+      return aiSubject;
+    }
+  } catch (e) {
+    console.warn("AI subject enhancement failed: " + e.message);
+  }
+  
+  return generateSubjectLine(jobTitle, customInstruction);
+}
+function extractMainRole(jobTitle) {
+  if (!jobTitle) return "Developer";
+  
+  let title = String(jobTitle).trim();
+  
+  // First try simple fallback (in case AI fails)
+  let fallbackRole = title
+    .replace(/\b(junior|senior|lead|principal|staff|intern|associate|entry.?level)\b/gi, "")
+    .replace(/\s+/g, " ")
+    .trim();
+  
+  if (!fallbackRole) fallbackRole = title;
+  
+  // If no API key, use fallback
+  if (!GROQ_API_KEY || GROQ_API_KEY === "YOUR_GROQ_API_KEY") {
+    return fallbackRole;
+  }
+  
+  try {
+    // Call Groq AI to extract main role
+    const url = "https://api.groq.com/openai/v1/chat/completions";
+    const payload = {
+      model: "mixtral-8x7b-32768",
+      messages: [
+        {
+          role: "user",
+          content: `Extract only the main job role/title from this text, removing seniority levels (junior, senior, lead, intern, etc.) and keeping only the core role. Reply with ONLY the role, nothing else.
+          
+Job title: "${title}"
+
+Example: "Junior Frontend Developer" → "Frontend Developer"
+Example: "Senior Backend Engineer Intern" → "Backend Engineer"
+Example: "Lead Full Stack Developer" → "Full Stack Developer"`
+        }
+      ],
+      max_tokens: 50,
+      temperature: 0.3
+    };
+    
+    const options = {
+      method: "post",
+      headers: {
+        "Authorization": "Bearer " + GROQ_API_KEY,
+        "Content-Type": "application/json"
+      },
+      payload: JSON.stringify(payload),
+      muteHttpExceptions: true
+    };
+    
+    const response = UrlFetchApp.fetch(url, options);
+    const result = JSON.parse(response.getContentText());
+    
+    if (result.choices && result.choices[0] && result.choices[0].message) {
+      let aiRole = result.choices[0].message.content.trim();
+      return aiRole || fallbackRole;
+    }
+  } catch (e) {
+    console.warn("AI extraction failed, using fallback: " + e.message);
+  }
+  
+  return fallbackRole;
+}
+
+// ============================================================
+// Get Reserved Default Email Template
+// ============================================================
+function getDefaultEmailTemplate() {
+  return {
+    plain: `Dear Hiring Team,
+
+I am excited to apply for the {{position}} position at {{company name}}.
+
+Please find attached my resume and cover letter for your review. I have strong experience with the {{role}} stack and am eager to contribute to your team.
+
+Thank you for your time and consideration.
+
+Best regards,
+
+Md Faysal Ahmed
+{{role only the main role like except intern jonor senior etc.}}
+P: +8801779161032`,
+    
+    html: `<p>Dear Hiring Team,</p>
+<p>I am excited to apply for the <b>{{position}}</b> position at <b>{{company name}}</b>.</p>
+<p>Please find attached my <b>resume</b> and <b>cover letter</b> for your review. I have strong experience with the <b>{{role}}</b> stack and am eager to contribute to your team.</p>
+<p>Thank you for your time and consideration.</p>
+<p>Best regards,</p>
+<p><b>Md Faysal Ahmed</b><br>
+{{role only the main role like except intern jonor senior etc.}}<br>
+P: +8801779161032</p>`
+  };
+}
+function sendBulkApplicationEmails(payload) {
+  if (!payload.jobs || payload.jobs.length === 0)
+    return "কোনো জব সিলেক্ট করা হয়নি।";
+
   if (MailApp.getRemainingDailyQuota() < payload.jobs.length) {
     throw new Error("Gmail quota exceeded!");
   }
 
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  
-  // 1. Fetch Template (Check Gmail Draft first, fallback to Sheet)
+
+  // 1. Fetch Template (Check Gmail Draft first, fallback to Sheet, then use Default)
   let htmlTemplate = null;
   let plainTemplate = null;
 
@@ -864,73 +1211,124 @@ function sendBulkApplicationEmails(payload) {
   // Fallback to Sheet if no draft found
   if (!htmlTemplate) {
     const tmplSheet = ss.getSheetByName("Email Template");
-    if (!tmplSheet) throw new Error("কোনো জিমেইল ড্রাফট বা 'Email Template' ট্যাব পাওয়া যায়নি।");
-    let rawText = tmplSheet.getRange("A1").getValue();
-    if (!rawText) throw new Error("টেমপ্লেট সম্পূর্ণ ফাঁকা! জিমেইলে 'ApplyFlow Template' নামের একটি ড্রাফট তৈরি করুন অথবা শিটের A1 সেলে টেমপ্লেট লিখুন।");
-    plainTemplate = String(rawText);
-    htmlTemplate = plainTemplate.replace(/\\n/g, "<br>");
-  }
-
-  let attachments = [];
-  let attachedFileNames = [];
-  
-  if (payload.resumeUrl) {
-    try {
-      const idMatch = payload.resumeUrl.match(/[-\\w]{25,}/);
-      if (idMatch) {
-        const file = DriveApp.getFileById(idMatch[0]);
-        attachments.push(file.getAs(MimeType.PDF));
-        attachedFileNames.push(file.getName());
-      } else throw new Error("Invalid Drive URL");
-    } catch (e) {
-      throw new Error("Resume Drive Error: " + e.message);
+    if (tmplSheet) {
+      let rawText = tmplSheet.getRange("A1").getValue();
+      if (rawText) {
+        plainTemplate = String(rawText);
+        htmlTemplate = plainTemplate.replace(/\\n/g, "<br>");
+      }
     }
-  } else if (payload.resumeBase64) {
-    attachments.push(Utilities.newBlob(Utilities.base64Decode(payload.resumeBase64), payload.resumeMime, payload.resumeName));
-    attachedFileNames.push(payload.resumeName);
   }
 
-  if (payload.addBase64) {
-    attachments.push(Utilities.newBlob(Utilities.base64Decode(payload.addBase64), payload.addMime, payload.addName));
-    attachedFileNames.push(payload.addName);
+  // ⭐ Final Fallback: Use Reserved Default Template
+  if (!htmlTemplate) {
+    const defaultTemplate = getDefaultEmailTemplate();
+    plainTemplate = defaultTemplate.plain;
+    htmlTemplate = defaultTemplate.html;
+    console.warn("Using reserved default email template.");
   }
-
-  let totalSize = attachments.reduce((acc, blob) => acc + blob.getBytes().length, 0);
-  if (totalSize > 25 * 1024 * 1024) throw new Error("Total attachment size > 25MB.");
 
   const appSheet = ss.getSheetByName("Applications");
   let successCount = 0;
   let errorCount = 0;
 
+  // ⭐ Process each job with its own attachments
   for (let job of payload.jobs) {
+    let jobAttachments = [];
+    let attachedFileNames = [];
+
+    // 1. Add CV/Resume for this job
+    if (job.cvBase64) {
+      try {
+        jobAttachments.push(
+          Utilities.newBlob(
+            Utilities.base64Decode(job.cvBase64),
+            job.cvMime || "application/pdf",
+            job.cvName || "CV.pdf",
+          ),
+        );
+        attachedFileNames.push(job.cvName || "CV");
+      } catch (e) {
+        console.warn("CV error for " + job.company + ": " + e.message);
+      }
+    }
+
+    // 2. Add Additional file for this job
+    if (job.addBase64) {
+      try {
+        jobAttachments.push(
+          Utilities.newBlob(
+            Utilities.base64Decode(job.addBase64),
+            job.addMime || "application/pdf",
+            job.addName || "Additional.pdf",
+          ),
+        );
+        attachedFileNames.push(job.addName || "Additional");
+      } catch (e) {
+        console.warn("Additional file error for " + job.company + ": " + e.message);
+      }
+    }
+
+    // Check total size for this job
+    let totalSize = jobAttachments.reduce(
+      (acc, blob) => acc + blob.getBytes().length,
+      0,
+    );
+    if (totalSize > 25 * 1024 * 1024) {
+      errorCount++;
+      console.warn(job.company + " - Attachment size > 25MB");
+      continue;
+    }
+
+    // ✅ Fallback: if company or title missing, use safe defaults
+    const safeCompany =
+      job.company && job.company !== "N/A" ? job.company : "your company";
+    const safeTitle =
+      job.title && job.title !== "N/A" ? job.title : "the open position";
+    const mainRole = extractMainRole(safeTitle); // ⭐ Extract main role for signature
+
     let mergedHtmlBody = String(htmlTemplate)
-      .replace(/\{{1,2}role\}{1,2}/gi, String(job.title))
-      .replace(/\{{1,2}company name\}{1,2}/gi, String(job.company))
-      .replace(/\{{1,2}company\}{1,2}/gi, String(job.company));
+      .replace(/\{{1,2}position\}{1,2}/gi, safeTitle)
+      .replace(/\{{1,2}role\}{1,2}/gi, safeTitle)
+      .replace(/\{{1,2}company name\}{1,2}/gi, safeCompany)
+      .replace(/\{{1,2}company\}{1,2}/gi, safeCompany)
+      .replace(/\{\{?role\s+only.*?\}?\}/gi, mainRole) // ⭐ Replace main role placeholder
+      .replace(/\[role\s+only.*?\]/gi, mainRole);
 
     let mergedPlainBody = String(plainTemplate)
-      .replace(/\{{1,2}role\}{1,2}/gi, String(job.title))
-      .replace(/\{{1,2}company name\}{1,2}/gi, String(job.company))
-      .replace(/\{{1,2}company\}{1,2}/gi, String(job.company));
-    
+      .replace(/\{{1,2}position\}{1,2}/gi, safeTitle)
+      .replace(/\{{1,2}role\}{1,2}/gi, safeTitle)
+      .replace(/\{{1,2}company name\}{1,2}/gi, safeCompany)
+      .replace(/\{{1,2}company\}{1,2}/gi, safeCompany)
+      .replace(/\{\{?role\s+only.*?\}?\}/gi, mainRole) // ⭐ Replace main role placeholder
+      .replace(/\[role\s+only.*?\]/gi, mainRole);
+
     try {
       GmailApp.sendEmail(job.applyEmail, job.computedSubject, mergedPlainBody, {
         htmlBody: mergedHtmlBody,
-        attachments: attachments,
-        name: "Md Faysal Ahmed"
+        attachments: jobAttachments,
+        name: "Md Faysal Ahmed",
       });
 
-      const timestamp = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "dd MMM, yyyy HH:mm");
+      const timestamp = Utilities.formatDate(
+        new Date(),
+        Session.getScriptTimeZone(),
+        "dd MMM, yyyy HH:mm",
+      );
       appSheet.getRange(job.rowIndex, 25).setValue(timestamp);
       appSheet.getRange(job.rowIndex, 17).setValue("Applied");
-      appSheet.getRange(job.rowIndex, 28).setValue(attachedFileNames.join(", "));
+      appSheet
+        .getRange(job.rowIndex, 28)
+        .setValue(attachedFileNames.join(", "));
       successCount++;
     } catch (e) {
       errorCount++;
-      console.error("Failed to send email for row " + job.rowIndex + ": " + e.message);
+      console.error(
+        "Failed to send email for row " + job.rowIndex + ": " + e.message,
+      );
     }
   }
-  
+
   if (errorCount > 0) {
     return `${successCount} টি সফল হয়েছে, ${errorCount} টিতে এরর হয়েছে!`;
   }
@@ -949,14 +1347,14 @@ function runAudit(showAlert = true) {
   if (data.length <= 1) return;
 
   const backgroundColors = sheet.getDataRange().getBackgrounds();
-  
+
   for (let i = 0; i < backgroundColors.length; i++) {
     while (backgroundColors[i].length < 28) {
       backgroundColors[i].push("#ffffff");
     }
   }
 
-  const issuesToUpdate = []; 
+  const issuesToUpdate = [];
   for (let i = 0; i < data.length; i++) {
     issuesToUpdate.push([data[i][26] ? String(data[i][26]) : ""]);
   }
@@ -964,21 +1362,21 @@ function runAudit(showAlert = true) {
   let hasChanges = false;
 
   for (let i = 1; i < data.length; i++) {
-    const applyMethod = String(data[i][6] || "").trim();  
-    const applyEmail = String(data[i][7] || "").trim();   
-    const company = String(data[i][2] || "").trim();      
-    const title = String(data[i][3] || "").trim();        
-    const deadline = data[i][12];    
-    const mailSent = data[i][24];    
-    
+    const applyMethod = String(data[i][6] || "").trim();
+    const applyEmail = String(data[i][7] || "").trim();
+    const company = String(data[i][2] || "").trim();
+    const title = String(data[i][3] || "").trim();
+    const deadline = data[i][12];
+    const mailSent = data[i][24];
+
     if (mailSent) continue;
 
     if (applyMethod === "Email") {
       let issues = [];
-      
+
       // Reset row color to white first (except Score at index 14)
-      for (let j=0; j < backgroundColors[i].length; j++) {
-        backgroundColors[i][j] = "#ffffff"; 
+      for (let j = 0; j < backgroundColors[i].length; j++) {
+        backgroundColors[i][j] = "#ffffff";
       }
       const finalScore = data[i][14];
       if (finalScore >= 80) backgroundColors[i][14] = "#c6efce";
@@ -1017,11 +1415,22 @@ function runAudit(showAlert = true) {
   }
 
   if (hasChanges) {
-    const range = sheet.getRange(1, 1, backgroundColors.length, backgroundColors[0].length);
+    const range = sheet.getRange(
+      1,
+      1,
+      backgroundColors.length,
+      backgroundColors[0].length,
+    );
     range.setBackgrounds(backgroundColors);
     sheet.getRange(1, 27, issuesToUpdate.length, 1).setValues(issuesToUpdate);
-    if (showAlert) SpreadsheetApp.getUi().alert("✅ রো যাচাই সম্পন্ন হয়েছে! অসম্পূর্ণ ফিল্ডগুলো লাল রঙে চিহ্নিত করা হয়েছে।");
+    if (showAlert)
+      SpreadsheetApp.getUi().alert(
+        "✅ রো যাচাই সম্পন্ন হয়েছে! অসম্পূর্ণ ফিল্ডগুলো লাল রঙে চিহ্নিত করা হয়েছে।",
+      );
   } else {
-    if (showAlert) SpreadsheetApp.getUi().alert("✅ রো যাচাই সম্পন্ন হয়েছে! কোনো ত্রুটি পাওয়া যায়নি।");
+    if (showAlert)
+      SpreadsheetApp.getUi().alert(
+        "✅ রো যাচাই সম্পন্ন হয়েছে! কোনো ত্রুটি পাওয়া যায়নি।",
+      );
   }
 }
