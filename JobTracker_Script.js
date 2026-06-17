@@ -724,19 +724,28 @@ Extensions > Apps Script > কোড এডিট করুন
 function autoSetup() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
 
-  // 1. Setup Applications Tab Columns
+  // 1. Create or Get Applications Tab
   let appSheet = ss.getSheetByName("Applications");
-  if (appSheet) {
-    appSheet.getRange("Y1").setValue("Mail Sent");
-    appSheet.getRange("Z1").setValue("Subject Format");
-    appSheet.getRange("AA1").setValue("Audit Issue");
-    appSheet.getRange("AB1").setValue("Attached Files");
+  if (!appSheet) {
+    appSheet = ss.insertSheet("Applications", 0); // Insert at position 0 (first)
+  } else {
+    // Move Applications to first position (index 0)
+    appSheet.moveToLocation(0);
   }
+
+  // Add/Update columns: Y, Z, AA, AB
+  appSheet.getRange("Y1").setValue("Mail Sent");
+  appSheet.getRange("Z1").setValue("Subject Format");
+  appSheet.getRange("AA1").setValue("Audit Issue");
+  appSheet.getRange("AB1").setValue("Attached Files");
 
   // 2. Setup Email Template Tab — Fixed: full professional template
   let tmplSheet = ss.getSheetByName("Email Template");
   if (!tmplSheet) {
-    tmplSheet = ss.insertSheet("Email Template");
+    tmplSheet = ss.insertSheet("Email Template", 1); // Insert at position 1 (second)
+  } else {
+    // Move Email Template to second position (index 1)
+    tmplSheet.moveToLocation(1);
   }
 
   // NOTE: This is a reference copy only.
@@ -757,8 +766,14 @@ function autoSetup() {
   tmplSheet.getRange("A1").setValue(emailTemplate);
   tmplSheet.setColumnWidth(1, 600);
 
+  // 3. Move My Rules to third position (index 2) if it exists
+  let myRulesSheet = ss.getSheetByName("My Rules");
+  if (myRulesSheet) {
+    myRulesSheet.moveToLocation(2);
+  }
+
   SpreadsheetApp.getUi().alert(
-    "Setup complete! New columns added to Applications tab and Email Template tab is ready.",
+    "Setup complete! Sheet order: Applications (1st) → Email Template (2nd) → My Rules (3rd).\n\nNew columns added to Applications tab.",
   );
 }
 
